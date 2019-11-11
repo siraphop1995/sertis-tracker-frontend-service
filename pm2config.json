@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "frontend",
+      "script": "./scripts/server.sh",
+      "env": {
+        "NODE_ENV": "production",
+        "PORT": "8080"
+      }
+    }
+  ]
+}
