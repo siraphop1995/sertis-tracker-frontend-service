@@ -11,6 +11,7 @@ import {
 import NavBar from '../components/NavBar';
 import { LoginPage } from '../LoginPage';
 import { CreateAccPage } from '../CreateAccPage';
+import { DashboardPage } from '../AdminPage';
 import { UserPage, UserDetailPage } from '../UsersPage';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 
@@ -32,6 +33,7 @@ class App extends React.Component {
     const DefaultContainer = () => (
       <div>
         {/* <NavBar /> */}
+        <Route path="/" component={DashboardPage} />
 
         <Route
           path="/logout"

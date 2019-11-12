@@ -63,7 +63,7 @@ class NavBar extends Component {
                 <MDBDropdownToggle nav caret>
                   <span className="mr-2">Info</span>
                 </MDBDropdownToggle>
-                <MDBDropdownMenu>
+                <MDBDropdownMenu className="mr-5">
                   <MDBNavLink to="/login">
                     <MDBDropdownItem>Login</MDBDropdownItem>
                   </MDBNavLink>
