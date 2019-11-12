@@ -1,29 +1,84 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
-
+import {
+  MDBNavbar,
+  MDBNavbarBrand,
+  MDBNavbarNav,
+  MDBNavItem,
+  MDBNavLink,
+  MDBNavbarToggler,
+  MDBCollapse,
+  MDBFormInline,
+  MDBDropdown,
+  MDBDropdownToggle,
+  MDBDropdownMenu,
+  MDBDropdownItem
+} from 'mdbreact';
 class NavBar extends Component {
   Auth = new AuthHelperMethods();
 
-  state = {};
+  state = { isOpen: false };
   handleLogout = e => {
     e.preventDefault();
     console.log(this);
     this.Auth.logout();
   };
+
+  toggleCollapse = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
   render() {
     return (
-      <nav className="navbar navbar-light bg-light">
-        <h5 className="navbar-brand">Navbar</h5>
-        <Link to="/">Home</Link>
-        <Link to="/tictactoe">TicTacToe</Link>
-        <Link to="/counters">Counters</Link>
-        <Link to="/users/st011">Users</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Signup</Link>
-        <Link to="/logout">Logout</Link>
-        {/* <a href="/sigin" onClick={this.handleLogout}>Logout</a> */}
-      </nav>
+      <MDBNavbar color="indigo" dark expand="md">
+        <MDBNavbarBrand>
+          <strong className="white-text">Navbar</strong>
+        </MDBNavbarBrand>
+        <MDBNavbarToggler onClick={this.toggleCollapse} />
+        <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
+          <MDBNavbarNav left>
+            <MDBNavItem>
+              <MDBNavLink to="/">Admin</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem>
+              <MDBNavLink to="/users/st011">User</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem></MDBNavItem>
+          </MDBNavbarNav>
+          <MDBNavbarNav right>
+            <MDBNavItem>
+              <MDBFormInline waves>
+                <div className="md-form my-0">
+                  <input
+                    className="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                </div>
+              </MDBFormInline>
+            </MDBNavItem>
+            <MDBNavItem>
+              <MDBDropdown>
+                <MDBDropdownToggle nav caret>
+                  <span className="mr-2">Info</span>
+                </MDBDropdownToggle>
+                <MDBDropdownMenu>
+                  <MDBNavLink to="/login">
+                    <MDBDropdownItem>Login</MDBDropdownItem>
+                  </MDBNavLink>
+                  <MDBNavLink to="/signup">
+                    <MDBDropdownItem>Add admin</MDBDropdownItem>
+                  </MDBNavLink>
+                  <MDBNavLink to="/logout">
+                    <MDBDropdownItem>logout</MDBDropdownItem>
+                  </MDBNavLink>
+                </MDBDropdownMenu>
+              </MDBDropdown>
+            </MDBNavItem>
+          </MDBNavbarNav>
+        </MDBCollapse>
+      </MDBNavbar>
     );
   }
 }
