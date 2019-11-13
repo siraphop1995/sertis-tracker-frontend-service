@@ -17,6 +17,11 @@ export async function getUserList() {
   });
 }
 
-export async function findUserDate(userId) {
-  return (await axios.post(`${DATE_SERVER}/findUserDate`, { userId: userId })).data.user;
+export async function findUserDate(userId, monthQuery) {
+  return (
+    await axios.post(`${DATE_SERVER}/findUserDate`, {
+      userId: userId,
+      monthQuery: monthQuery
+    })
+  ).data.user;
 }

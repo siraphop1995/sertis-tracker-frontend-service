@@ -38,12 +38,14 @@ class UserPage extends React.Component {
     await this.axiosUserData(userId);
   }
 
-  axiosUserData = async userId => {
-    const userDateData = await findUserDate(userId);
-    console.log(userDateData);
+  axiosUserData = async (userId, selectedMonth) => {
+    const userDateData = await findUserDate(userId, selectedMonth);
+    
     const { dateData } = userDateData;
     userDateData.dateData = undefined;
-
+    console.log('userDateData');
+    console.log(userDateData);
+    console.log(dateData);
     this.setState({ dateData, userData: userDateData });
   };
 
@@ -61,13 +63,19 @@ class UserPage extends React.Component {
       this.setState({ dataLoaded: true });
     } catch (err) {
       this.setState({ dataLoaded: false });
-    } finally {
     }
   };
 
-  handleMonthChange = event => {
-    this.setState({ selectedMonth: event });
-    console.log(this.state.selectedMonth);
+  handleMonthChange = async event => {
+    try {
+      this.setState({ selectedMonth: event });
+      console.log(this.state.selectedMonth);
+      const { uid } = this.state.userData;
+      await this.axiosUserData(uid, event);
+      this.setState({ dataLoaded: true });
+    } catch (err) {
+      this.setState({ dataLoaded: false });
+    }
   };
 
   render() {
