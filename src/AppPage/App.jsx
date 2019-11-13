@@ -14,6 +14,8 @@ import { CreateAccPage } from '../CreateAccPage';
 import { DashboardPage } from '../AdminPage';
 import { UserPage } from '../UsersPage';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 class App extends React.Component {
   Auth = new AuthHelperMethods();
@@ -48,6 +50,7 @@ class App extends React.Component {
     // console.log(this.Auth.getConfirm())
     return (
       <div>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
           <NavBar />
           <Switch>
             <Route path="/login" component={LoginPage} />
@@ -55,6 +58,7 @@ class App extends React.Component {
             <Route path="/users" component={UserPage} />
             <Route path="/*" component={DefaultContainer} />
           </Switch>
+        </MuiPickersUtilsProvider>
       </div>
     );
   }

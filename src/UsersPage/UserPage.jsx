@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment, useState } from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 // import withAuth from '../components/withAuth';
 import { findUserDate } from '../Helpers/dbHandler';
+import { DatePicker } from '@material-ui/pickers';
 
 import {
   MDBContainer,
@@ -15,6 +16,7 @@ import {
   MDBInput
 } from 'mdbreact';
 import { MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
+import { thisExpression } from '@babel/types';
 class UserPage extends React.Component {
   Helper = new HelperMethods();
   constructor(props) {
@@ -22,6 +24,7 @@ class UserPage extends React.Component {
 
     this.state = {
       dateData: [],
+      selectedMonth: new Date(),
       search: '',
       dataLoaded: true,
       alertMessage: '',
@@ -62,49 +65,44 @@ class UserPage extends React.Component {
     }
   };
 
-  render() {
-    const { userData, dateData, dataLoaded, userId } = this.state;
-    let pickerLang = {
-        months: [
-          'Jan',
-          'Feb',
-          'Mar',
-          'Spr',
-          'May',
-          'Jun',
-          'Jul',
-          'Aug',
-          'Sep',
-          'Oct',
-          'Nov',
-          'Dec'
-        ],
-        from: 'From',
-        to: 'To'
-      },
-      mvalue = { year: 2015, month: 11 },
-      mrange = { from: { year: 2014, month: 8 }, to: { year: 2015, month: 5 } };
+  handleMonthChange = event => {
+    this.setState({ selectedMonth: event });
+    console.log(this.state.selectedMonth);
+  };
 
-    let makeText = m => {
-      if (m && m.year && m.month)
-        return pickerLang.months[m.month - 1] + '. ' + m.year;
-      return '?';
-    };
+  render() {
+    const {
+      userData,
+      dateData,
+      dataLoaded,
+      userId,
+      selectedMonth
+    } = this.state;
+
     return (
       <div>
         <MDBContainer fluid>
-
           <MDBCol>
             <MDBCard style={{ marginTop: '20px' }}>
               <MDBRow className="mx-3 mt-4">
-                <MDBCol size="6">
+                <MDBCol size="5">
                   {userData ? (
                     <h2>
                       {userData.uid}: {userData.firstName} {userData.lastName}
                     </h2>
                   ) : null}
                 </MDBCol>
-                <MDBCol size="2"></MDBCol>
+                <MDBCol size="3">
+                  <DatePicker
+                    views={['year', 'month']}
+                    label="Month"
+                    disabled={!userData}
+                    minDate={new Date('2017-01-01')}
+                    maxDate={new Date()}
+                    value={selectedMonth}
+                    onChange={this.handleMonthChange}
+                  />
+                </MDBCol>
                 <MDBCol size="4">
                   <div className="md-form my-0">
                     <input
