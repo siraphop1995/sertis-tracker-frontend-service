@@ -12,7 +12,7 @@ import NavBar from '../components/NavBar';
 import { LoginPage } from '../LoginPage';
 import { CreateAccPage } from '../CreateAccPage';
 import { DashboardPage } from '../AdminPage';
-import { UserPage, UserDetailPage } from '../UsersPage';
+import { UserPage } from '../UsersPage';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 
 class App extends React.Component {
@@ -48,14 +48,13 @@ class App extends React.Component {
     // console.log(this.Auth.getConfirm())
     return (
       <div>
-        <NavBar />
-        <Switch>
-          <Route path="/login" component={LoginPage} />
-          <Route path="/signup" component={CreateAccPage} />
-          <Route path="/users/:userId" component={UserDetailPage} />
-          <Route path="/users" component={UserPage} />
-          <Route path="/*" component={DefaultContainer} />
-        </Switch>
+          <NavBar />
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+            <Route path="/signup" component={CreateAccPage} />
+            <Route path="/users" component={UserPage} />
+            <Route path="/*" component={DefaultContainer} />
+          </Switch>
       </div>
     );
   }

@@ -40,8 +40,6 @@ class UserDetailPage extends React.Component {
     this.setState({ dateData });
   }
 
-  _praseDate = date => date.split('/').map(d => parseInt(d, 10));
-
   render() {
     const { match } = this.props;
     return (
