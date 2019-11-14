@@ -19,12 +19,16 @@ class EditModal extends React.Component {
       modal: false,
       userDate: { data: {} },
       userData: {},
-      fname: 'Mark',
-      lname: 'Otto',
-      email: '',
-      city: '',
-      state: '',
-      zip: ''
+      options: [
+        {
+          text: 'complete',
+          value: 'complete'
+        },
+        {
+          text: 'incomplete',
+          value: 'incomplete'
+        }
+      ]
     };
   }
   validate() {
@@ -58,6 +62,7 @@ class EditModal extends React.Component {
     if (this.validate()) {
       console.log('Valid!!!!');
     }
+    console.log(this.state.userDate)
   };
 
   changeHandler = event => {
@@ -77,7 +82,15 @@ class EditModal extends React.Component {
       event.target.setCustomValidity('invalid');
     }
 
-    this.setState({ [name]: value });
+    this.setState({
+      userDate: {
+        ...this.state.userDate,
+        data: {
+          ...this.state.userDate.data,
+          [name]: value
+        }
+      }
+    });
   };
 
   render() {
@@ -98,7 +111,7 @@ class EditModal extends React.Component {
             <MDBModalBody>
               <MDBContainer>
                 <MDBRow>
-                  <MDBCol md="12">
+                  <MDBCol>
                     <form
                       className="needs-validation"
                       ref={this.form}
@@ -106,7 +119,7 @@ class EditModal extends React.Component {
                       noValidate
                     >
                       <MDBRow>
-                        <MDBCol md="4" className="mb-3">
+                        <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">inTime</label>
                           <input
                             name="inTime"
@@ -118,7 +131,7 @@ class EditModal extends React.Component {
                           />
                           <div className="invalid-feedback">Require!</div>
                         </MDBCol>
-                        <MDBCol md="4" className="mb-3">
+                        <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">outTime</label>
                           <input
                             name="outTime"
@@ -126,107 +139,94 @@ class EditModal extends React.Component {
                             onChange={this.changeHandler}
                             type="text"
                             className="form-control"
-                            placeholder="outTime"
                             required
                           />
                           <div className="invalid-feedback">Require!</div>
                         </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterConfirmEx3"
-                            className="grey-text"
-                          >
-                            Email
-                          </label>
+                        <MDBCol md="4" lg="3" className="mb-3">
+                          <label className="grey-text">expectedWork</label>
                           <input
-                            value={this.state.email}
+                            name="expectedWorkTime"
+                            value={userDate.data.expectedWorkTime}
                             onChange={this.changeHandler}
-                            type="email"
+                            type="text"
                             className="form-control"
-                            name="email"
-                            placeholder="Email"
                             required
                           />
-                          <div className="invalid-feedback">Invalid email!</div>
+                          <div className="invalid-feedback">Require!</div>
+                        </MDBCol>
+                        <MDBCol md="4" lg="3" className="mb-3">
+                          <label className="grey-text">actualWork</label>
+                          <input
+                            name="actualWorkTime"
+                            value={userDate.data.actualWorkTime}
+                            onChange={this.changeHandler}
+                            type="text"
+                            className="form-control"
+                            required
+                          />
+                          <div className="invalid-feedback">Require!</div>
+                        </MDBCol>
+                        <MDBCol md="4" lg="3" className="mb-3">
+                          <label className="grey-text">status</label>
+                          {/* <input
+                            name="status"
+                            value={userDate.data.status}
+                            onChange={this.changeHandler}
+                            type="text"
+                            className="form-control"
+                            required
+                          /> */}
+                          <select
+                            className="browser-default custom-select"
+                            name="status"
+                            value={userDate.data.status}
+                            onChange={this.changeHandler}
+                          >
+                            <option value="complete">complete</option>
+                            <option value="incomplete">incomplete</option>
+                          </select>
+                          <div className="invalid-feedback">Require!</div>
                         </MDBCol>
                       </MDBRow>
                       <MDBRow>
-                        <MDBCol md="4" className="mb-3">
-                          <label className="grey-text">City</label>
-                          <input
-                            value={this.state.city}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            name="city"
-                            placeholder="City"
-                            required
-                          />
-                          <div className="invalid-feedback">Invalid</div>
+                        <MDBCol md="4">
+                          <div className="custom-control custom-checkbox pl-3">
+                            <input
+                              className="custom-control-input"
+                              type="checkbox"
+                              value=""
+                              id="invalidCheck"
+                              required
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="invalidCheck"
+                            >
+                              Accept change
+                            </label>
+                            <div className="invalid-feedback">
+                              You must agree before submitting.
+                            </div>
+                          </div>
                         </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                          <label className="grey-text">State</label>
-                          <input
-                            value={this.state.state}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            name="state"
-                            placeholder="State"
-                            required
-                          />
-                          <div className="invalid-feedback">Invalid</div>{' '}
-                        </MDBCol>
-                        <MDBCol md="4" className="mb-3">
-                          <label className="grey-text">Zip</label>
-                          <input
-                            value={this.state.zip}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            name="zip"
-                            placeholder="Zip"
-                            required
-                          />
-                          <div className="invalid-feedback">Invalid</div>{' '}
+
+                        <MDBCol md="4">
+                          <MDBBtn color="primary" type="submit">
+                            Submit Form
+                          </MDBBtn>
                         </MDBCol>
                       </MDBRow>
-                      <MDBCol md="4" className="mb-3">
-                        <div className="custom-control custom-checkbox pl-3">
-                          <input
-                            className="custom-control-input"
-                            type="checkbox"
-                            value=""
-                            id="invalidCheck"
-                            required
-                          />
-                          <label
-                            className="custom-control-label"
-                            htmlFor="invalidCheck"
-                          >
-                            Accept change
-                          </label>
-                          <div className="invalid-feedback">
-                            You must agree before submitting.
-                          </div>
-                        </div>
-                      </MDBCol>
-                      <MDBCol md="4" className="mb-3">
-                        <div className="custom-control custom-checkbox pl-3"></div>
-                      </MDBCol>
-                      <MDBBtn color="primary" type="submit">
-                        Submit Form
-                      </MDBBtn>
                     </form>
                   </MDBCol>
                 </MDBRow>
               </MDBContainer>
             </MDBModalBody>
             <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={this.props.toggle}>
+              {/* <MDBBtn color="secondary" onClick={this.props.toggle}>
                 Close
               </MDBBtn>
-              <MDBBtn color="primary">Save changes</MDBBtn>
+              <MDBBtn color="primary">Save changes</MDBBtn> */}
             </MDBModalFooter>
           </MDBModal>
         </MDBContainer>
