@@ -53,7 +53,7 @@ class UserPage extends React.Component {
     this.setState({ dateData, userData: userDateData });
   };
 
-  handleChange = e => {
+  handleSearchChange = e => {
     const { name, value } = e.target;
     this.setState({
       [name]: value
@@ -120,7 +120,7 @@ class UserPage extends React.Component {
                     <input
                       className="form-control mr-sm-2"
                       name="search"
-                      onChange={this.handleChange}
+                      onChange={this.handleSearchChange}
                       type="text"
                       placeholder="Search"
                     />
@@ -135,7 +135,11 @@ class UserPage extends React.Component {
                 {!dataLoaded ? (
                   <MDBAlert color="danger">User not found</MDBAlert>
                 ) : null}
-                <UserTable dateData={this.state.dateData} validToken={validToken} />
+                <UserTable
+                  dateData={dateData}
+                  validToken={validToken}
+                  userData={userData}
+                />
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

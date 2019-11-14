@@ -24,6 +24,7 @@ class UserTable extends React.Component {
       dateData: [],
       validToken: false,
       modal: false,
+      userDate: {},
       userData: {}
     };
   }
@@ -45,13 +46,18 @@ class UserTable extends React.Component {
         validToken: this.props.validToken
       });
     }
+    if (this.props.userData !== prevProps.userData) {
+      this.setState({
+        userData: this.props.userData
+      });
+    }
   }
 
-  toggle = userData => {
+  toggle = userDate => {
     if (!this.state.modal === true) {
-      console.log(userData);
+      console.log(userDate);
       this.setState({
-        userData: userData
+        userDate: userDate
       });
     }
     this.setState({
@@ -76,7 +82,12 @@ class UserTable extends React.Component {
             </MDBModalFooter>
           </MDBModal>
         </MDBContainer> */}
-        <EditModal modal={this.state.modal} userData={this.state.userData} toggle={this.toggle}/>
+        <EditModal
+          modal={this.state.modal}
+          userDate={this.state.userDate}
+          userData={this.state.userData}
+          toggle={this.toggle}
+        />
         <MDBTable hover small responsive>
           <MDBTableHead>
             <tr>

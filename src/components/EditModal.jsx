@@ -19,19 +19,24 @@ class EditModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { modal: false, userData: {} };
+    this.state = { modal: false, userDate: {}, userData: {} };
   }
 
   componentDidUpdate(prevProps) {
-    console.log('update');
-    console.log(this.props);
-
     if (this.props.modal !== prevProps.modal) {
       this.setState({
         modal: this.props.modal
       });
     }
+    if (this.props.userDate !== prevProps.userDate) {
+      console.log(this.props.userDate);
+
+      this.setState({
+        userDate: this.props.userDate
+      });
+    }
     if (this.props.userData !== prevProps.userData) {
+      console.log(this.props.userData);
       this.setState({
         userData: this.props.userData
       });
@@ -39,7 +44,7 @@ class EditModal extends React.Component {
   }
 
   render() {
-    const { userData } = this.state;
+    const { userDate, userData } = this.state;
 
     return (
       <div>
@@ -48,11 +53,12 @@ class EditModal extends React.Component {
             isOpen={this.state.modal}
             toggle={this.props.toggle}
             centered
+            size="lg"
           >
             <MDBModalHeader toggle={this.props.toggle}>
-              MDBModal title
+              {userData.firstName} {userData.lastName} {userDate.date}
             </MDBModalHeader>
-            <MDBModalBody>{userData.date}</MDBModalBody>
+            <MDBModalBody>{userDate.date}</MDBModalBody>
             <MDBModalFooter>
               <MDBBtn color="secondary" onClick={this.props.toggle}>
                 Close
