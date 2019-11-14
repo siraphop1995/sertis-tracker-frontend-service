@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 // import withAuth from '../components/withAuth';
+import UserTable from './UserTable';
+
 import { findUserDate } from '../Helpers/dbHandler';
 import { DatePicker } from '@material-ui/pickers';
 
@@ -29,7 +31,9 @@ class UserPage extends React.Component {
       dataLoaded: true,
       alertMessage: '',
       userId: '',
-      userData: {}
+      userData: {},
+      token: '12346',
+      validToken: true
     };
   }
 
@@ -40,10 +44,10 @@ class UserPage extends React.Component {
 
   axiosUserData = async (userId, selectedMonth) => {
     const userDateData = await findUserDate(userId, selectedMonth);
-    
+
     const { dateData } = userDateData;
     userDateData.dateData = undefined;
-    console.log('userDateData');
+    console.log('lodeDateData');
     console.log(userDateData);
     console.log(dateData);
     this.setState({ dateData, userData: userDateData });
@@ -83,8 +87,8 @@ class UserPage extends React.Component {
       userData,
       dateData,
       dataLoaded,
-      userId,
-      selectedMonth
+      selectedMonth,
+      validToken
     } = this.state;
 
     return (
@@ -131,49 +135,7 @@ class UserPage extends React.Component {
                 {!dataLoaded ? (
                   <MDBAlert color="danger">User not found</MDBAlert>
                 ) : null}
-
-                <MDBTable hover small responsive>
-                  <MDBTableHead>
-                    <tr>
-                      <th scope="col">date</th>
-                      <th scope="col">inTime</th>
-                      <th scope="col">outTime</th>
-                      <th scope="col">expectWork</th>
-                      <th scope="col">actualWork</th>
-                      <th scope="col">status</th>
-                      <th scope="col">action</th>
-                    </tr>
-                  </MDBTableHead>
-
-                  <MDBTableBody>
-                    {dateData.map(data => {
-                      let color =
-                        data.data.status === 'incomplete'
-                          ? 'table-warning'
-                          : 'table-light';
-                      return (
-                        <tr key={data.date} className={color}>
-                          <th>{data.date}</th>
-                          <td>{data.data.inTime}</td>
-                          <td>{data.data.outTime}</td>
-                          <td>{data.data.expectedWorkTime}</td>
-                          <td>{data.data.actualWorkTime}</td>
-                          <td>{data.data.status}</td>
-                          <td>
-                            <span>
-                              <button
-                                type="button"
-                                className="btn btn-danger btn-rounded btn-sm my-0"
-                              >
-                                Remove
-                              </button>
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </MDBTableBody>
-                </MDBTable>
+                <UserTable dateData={this.state.dateData} validToken={validToken} />
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
