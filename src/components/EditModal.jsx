@@ -13,9 +13,11 @@ class EditModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.form = React.createRef();
+
     this.state = {
       modal: false,
-      userDate: {},
+      userDate: { data: {} },
       userData: {},
       fname: 'Mark',
       lname: 'Otto',
@@ -24,6 +26,9 @@ class EditModal extends React.Component {
       state: '',
       zip: ''
     };
+  }
+  validate() {
+    return this.form.current.reportValidity();
   }
 
   componentDidUpdate(prevProps) {
@@ -50,11 +55,14 @@ class EditModal extends React.Component {
   submitHandler = event => {
     event.preventDefault();
     event.target.className += ' was-validated';
+    if (this.validate()) {
+      console.log('Valid!!!!');
+    }
   };
 
   changeHandler = event => {
     const { name, value } = event.target;
-    let isValid = undefined;
+    let isValid = true;
     switch (name) {
       case 'fname':
         isValid = value.length < 8 ? false : true;
@@ -93,47 +101,35 @@ class EditModal extends React.Component {
                   <MDBCol md="12">
                     <form
                       className="needs-validation"
+                      ref={this.form}
                       onSubmit={this.submitHandler}
                       noValidate
                     >
                       <MDBRow>
                         <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterNameEx"
-                            className="grey-text"
-                          >
-                            First name
-                          </label>
+                          <label className="grey-text">inTime</label>
                           <input
-                            value={this.state.fname}
-                            name="fname"
+                            name="inTime"
+                            value={userDate.data.inTime}
                             onChange={this.changeHandler}
                             type="text"
-                            id="defaultFormRegisterNameEx"
                             className="form-control"
-                            placeholder="First name"
                             required
                           />
-                          <div className="valid-feedback">Looks good!</div>
+                          <div className="invalid-feedback">Require!</div>
                         </MDBCol>
                         <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterEmailEx2"
-                            className="grey-text"
-                          >
-                            Last name
-                          </label>
+                          <label className="grey-text">outTime</label>
                           <input
-                            value={this.state.lname}
-                            name="lname"
+                            name="outTime"
+                            value={userDate.data.outTime}
                             onChange={this.changeHandler}
                             type="text"
-                            id="defaultFormRegisterEmailEx2"
                             className="form-control"
-                            placeholder="Last name"
+                            placeholder="outTime"
                             required
                           />
-                          <div className="valid-feedback">Looks good!</div>
+                          <div className="invalid-feedback">Require!</div>
                         </MDBCol>
                         <MDBCol md="4" className="mb-3">
                           <label
@@ -146,85 +142,53 @@ class EditModal extends React.Component {
                             value={this.state.email}
                             onChange={this.changeHandler}
                             type="email"
-                            id="defaultFormRegisterConfirmEx3"
                             className="form-control"
                             name="email"
-                            placeholder="Your Email address"
+                            placeholder="Email"
+                            required
                           />
-                          <small
-                            id="emailHelp"
-                            className="form-text text-muted"
-                          >
-                            We'll never share your email with anyone else.
-                          </small>
+                          <div className="invalid-feedback">Invalid email!</div>
                         </MDBCol>
                       </MDBRow>
                       <MDBRow>
                         <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterPasswordEx4"
-                            className="grey-text"
-                          >
-                            City
-                          </label>
+                          <label className="grey-text">City</label>
                           <input
                             value={this.state.city}
                             onChange={this.changeHandler}
                             type="text"
-                            id="defaultFormRegisterPasswordEx4"
                             className="form-control"
                             name="city"
                             placeholder="City"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please provide a valid city.
-                          </div>
-                          <div className="valid-feedback">Looks good!</div>
+                          <div className="invalid-feedback">Invalid</div>
                         </MDBCol>
                         <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterPasswordEx4"
-                            className="grey-text"
-                          >
-                            State
-                          </label>
+                          <label className="grey-text">State</label>
                           <input
                             value={this.state.state}
                             onChange={this.changeHandler}
                             type="text"
-                            id="defaultFormRegisterPasswordEx4"
                             className="form-control"
                             name="state"
                             placeholder="State"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please provide a valid state.
-                          </div>
-                          <div className="valid-feedback">Looks good!</div>
+                          <div className="invalid-feedback">Invalid</div>{' '}
                         </MDBCol>
                         <MDBCol md="4" className="mb-3">
-                          <label
-                            htmlFor="defaultFormRegisterPasswordEx4"
-                            className="grey-text"
-                          >
-                            Zip
-                          </label>
+                          <label className="grey-text">Zip</label>
                           <input
                             value={this.state.zip}
                             onChange={this.changeHandler}
                             type="text"
-                            id="defaultFormRegisterPasswordEx4"
                             className="form-control"
                             name="zip"
                             placeholder="Zip"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please provide a valid zip.
-                          </div>
-                          <div className="valid-feedback">Looks good!</div>
+                          <div className="invalid-feedback">Invalid</div>{' '}
                         </MDBCol>
                       </MDBRow>
                       <MDBCol md="4" className="mb-3">
@@ -240,12 +204,15 @@ class EditModal extends React.Component {
                             className="custom-control-label"
                             htmlFor="invalidCheck"
                           >
-                            Agree to terms and conditions
+                            Accept change
                           </label>
                           <div className="invalid-feedback">
                             You must agree before submitting.
                           </div>
                         </div>
+                      </MDBCol>
+                      <MDBCol md="4" className="mb-3">
+                        <div className="custom-control custom-checkbox pl-3"></div>
                       </MDBCol>
                       <MDBBtn color="primary" type="submit">
                         Submit Form
