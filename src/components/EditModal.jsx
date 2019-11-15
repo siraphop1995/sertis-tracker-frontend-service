@@ -61,18 +61,25 @@ class EditModal extends React.Component {
     event.target.className += ' was-validated';
     if (this.validate()) {
       console.log('Valid!!!!');
+      console.log(this.state.userDate);
     }
-    console.log(this.state.userDate)
   };
 
   changeHandler = event => {
     const { name, value } = event.target;
     let isValid = true;
     switch (name) {
-      case 'fname':
-        isValid = value.length < 8 ? false : true;
+      case 'inTime':
+        isValid = this._validTime(value);
         break;
-      case 'lname':
+      case 'outTime':
+        isValid = this._validTime(value);
+        break;
+      case 'expectedWorkTime':
+        isValid = this._validWork(value);
+        break;
+      case 'actualWorkTime':
+        isValid = this._validWork(value);
         break;
     }
 
@@ -91,6 +98,31 @@ class EditModal extends React.Component {
         }
       }
     });
+  };
+  _validTime = value => {
+    return value.length !== 8
+      ? false
+      : value.split(':').length !== 3
+      ? false
+      : isNaN(value.split(':')[0])
+      ? false
+      : isNaN(value.split(':')[1])
+      ? false
+      : isNaN(value.split(':')[2])
+      ? false
+      : true;
+  };
+
+  _validWork = value => {
+    return value.length !== 5
+      ? false
+      : value.split(':').length !== 2
+      ? false
+      : isNaN(value.split(':')[0])
+      ? false
+      : isNaN(value.split(':')[1])
+      ? false
+      : true;
   };
 
   render() {
@@ -129,7 +161,9 @@ class EditModal extends React.Component {
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">Require!</div>
+                          <div className="invalid-feedback">
+                            Wrong format, please use [hh:mm:ss]
+                          </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">outTime</label>
@@ -141,7 +175,9 @@ class EditModal extends React.Component {
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">Require!</div>
+                          <div className="invalid-feedback">
+                            Wrong format, please use [hh:mm:ss]
+                          </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">expectedWork</label>
@@ -153,7 +189,9 @@ class EditModal extends React.Component {
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">Require!</div>
+                          <div className="invalid-feedback">
+                            Wrong format, please use [hh:mm]
+                          </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">actualWork</label>
@@ -165,18 +203,12 @@ class EditModal extends React.Component {
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">Require!</div>
+                          <div className="invalid-feedback">
+                            Wrong format, please use 'hh:mm'
+                          </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">status</label>
-                          {/* <input
-                            name="status"
-                            value={userDate.data.status}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            required
-                          /> */}
                           <select
                             className="browser-default custom-select"
                             name="status"
