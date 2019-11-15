@@ -1,5 +1,5 @@
 import React from 'react';
-import EditModal from '../components/EditModal';
+import UserModal from './UserModal';
 
 import {
   MDBTable,
@@ -7,13 +7,6 @@ import {
   MDBTableHead,
   MDBIcon,
   MDBBtn
-} from 'mdbreact';
-import {
-  MDBContainer,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter
 } from 'mdbreact';
 
 class UserTable extends React.Component {
@@ -65,28 +58,41 @@ class UserTable extends React.Component {
     });
   };
 
+  updateHandler = (userData, userDate) => {
+    console.log('updatehandler');
+    console.log(userData);
+    console.log(userDate);
+    console.log(this.state.dateData);
+
+    this.setState({
+      dateData: this.state.dateData.map(d => {
+        if (d.did === userDate.did) {
+          d.data = userDate.data;
+        }
+        return d;
+      })
+    });
+
+    this.setState({
+      dateData: this.state.dateData.map(d =>
+        d.did === userDate.did ? userDate : d
+      )
+    });
+
+    console.log(this.state.dateData);
+  };
+
   render() {
     const { dateData, validToken } = this.state;
 
     return (
       <div>
-        {/* <MDBContainer>
-          <MDBModal isOpen={this.state.modal} toggle={this.toggle} centered>
-            <MDBModalHeader toggle={this.toggle}>MDBModal title</MDBModalHeader>
-            <MDBModalBody>(...)</MDBModalBody>
-            <MDBModalFooter>
-              <MDBBtn color="secondary" onClick={this.toggle}>
-                Close
-              </MDBBtn>
-              <MDBBtn color="primary">Save changes</MDBBtn>
-            </MDBModalFooter>
-          </MDBModal>
-        </MDBContainer> */}
-        <EditModal
+        <UserModal
           modal={this.state.modal}
           userDate={this.state.userDate}
           userData={this.state.userData}
           toggle={this.toggle}
+          onUpdate={this.updateHandler}
         />
         <MDBTable hover small responsive>
           <MDBTableHead>
@@ -106,6 +112,8 @@ class UserTable extends React.Component {
               let color =
                 data.data.status === 'incomplete'
                   ? 'table-danger'
+                  : data.data.status === 'overtime'
+                  ? 'table-warning'
                   : 'table-light';
               return (
                 <tr key={data.date} className={color}>

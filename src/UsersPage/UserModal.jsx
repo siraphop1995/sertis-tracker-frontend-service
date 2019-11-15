@@ -19,17 +19,7 @@ class EditModal extends React.Component {
     this.state = {
       modal: false,
       userDate: { data: {} },
-      userData: {},
-      options: [
-        {
-          text: 'complete',
-          value: 'complete'
-        },
-        {
-          text: 'incomplete',
-          value: 'incomplete'
-        }
-      ]
+      userData: {}
     };
   }
   validate() {
@@ -58,17 +48,19 @@ class EditModal extends React.Component {
   }
 
   submitHandler = async event => {
-    event.preventDefault();
-    event.target.className += ' was-validated';
-    if (this.validate()) {
-      console.log('Valid!!!!');
-      let { userData, userDate } = this.state;
-      userDate.data.expectedWorkTime = this._toMin(
-        userDate.data.expectedWorkTime
-      );
-      userDate.data.actualWorkTime = this._toMin(userDate.data.actualWorkTime);
-      const res = await updateDateUser(userData, userDate);
-      console.log(res);
+    try {
+      event.preventDefault();
+      event.target.className += ' was-validated';
+      if (this.validate()) {
+        console.log('Valid!!!!');
+        let { userData, userDate } = this.state;
+
+        const res = await updateDateUser(userData, userDate);
+        this.props.onUpdate(userData, userDate)
+        this.props.toggle()
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -132,10 +124,7 @@ class EditModal extends React.Component {
       : true;
   };
 
-  _toMin = value => {
-    const [hh, mm] = value.split(':').map(v => parseInt(v, 10));
-    return hh * 60 + mm;
-  };
+  
 
   render() {
     const { userDate, userData } = this.state;
@@ -229,6 +218,7 @@ class EditModal extends React.Component {
                           >
                             <option value="complete">complete</option>
                             <option value="incomplete">incomplete</option>
+                            <option value="overtime">overtime</option>
                           </select>
                           <div className="invalid-feedback">Require!</div>
                         </MDBCol>
@@ -255,7 +245,7 @@ class EditModal extends React.Component {
                           </div>
                         </MDBCol>
 
-                        <MDBCol md="4">
+                        <MDBCol md="8">
                           <MDBBtn color="primary" type="submit">
                             Submit Form
                           </MDBBtn>
