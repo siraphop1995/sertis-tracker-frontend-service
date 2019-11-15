@@ -1,4 +1,5 @@
 import React from 'react';
+import { updateDateUser } from '../Helpers/dbHandler';
 
 import { MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 import {
@@ -56,12 +57,18 @@ class EditModal extends React.Component {
     }
   }
 
-  submitHandler = event => {
+  submitHandler = async event => {
     event.preventDefault();
     event.target.className += ' was-validated';
     if (this.validate()) {
       console.log('Valid!!!!');
-      console.log(this.state.userDate);
+      let { userData, userDate } = this.state;
+      userDate.data.expectedWorkTime = this._toMin(
+        userDate.data.expectedWorkTime
+      );
+      userDate.data.actualWorkTime = this._toMin(userDate.data.actualWorkTime);
+      const res = await updateDateUser(userData, userDate);
+      console.log(res);
     }
   };
 
@@ -123,6 +130,11 @@ class EditModal extends React.Component {
       : isNaN(value.split(':')[1])
       ? false
       : true;
+  };
+
+  _toMin = value => {
+    const [hh, mm] = value.split(':').map(v => parseInt(v, 10));
+    return hh * 60 + mm;
   };
 
   render() {
