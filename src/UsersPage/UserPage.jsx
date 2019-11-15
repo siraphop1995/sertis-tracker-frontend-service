@@ -38,8 +38,15 @@ class UserPage extends React.Component {
   }
 
   async componentDidMount() {
-    const userId = 'st011';
-    await this.axiosUserData(userId);
+    const { userId } = this.props.match.params;
+    if (userId) {
+      try {
+        await this.axiosUserData(userId);
+        this.setState({ dataLoaded: true });
+      } catch (err) {
+        this.setState({ dataLoaded: false });
+      }
+    }
   }
 
   axiosUserData = async (userId, selectedMonth) => {
@@ -47,9 +54,6 @@ class UserPage extends React.Component {
 
     const { dateData } = userDateData;
     userDateData.dateData = undefined;
-    console.log('lodeDateData');
-    console.log(userDateData);
-    console.log(dateData);
     this.setState({ dateData, userData: userDateData });
   };
 
@@ -98,7 +102,7 @@ class UserPage extends React.Component {
             <MDBCard style={{ marginTop: '20px' }}>
               <MDBRow className="mx-3 mt-4">
                 <MDBCol size="5">
-                  {userData ? (
+                  {Object.keys(userData).length ? (
                     <h2>
                       {userData.uid}: {userData.firstName} {userData.lastName}
                     </h2>

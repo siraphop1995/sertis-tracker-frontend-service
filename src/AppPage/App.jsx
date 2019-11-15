@@ -55,6 +55,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/login" component={LoginPage} />
             <Route path="/signup" component={CreateAccPage} />
+            <Route path="/users/:userId" component={UserPage} />
             <Route path="/users" component={UserPage} />
             <Route path="/*" component={DefaultContainer} />
           </Switch>
