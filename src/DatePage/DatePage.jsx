@@ -1,67 +1,68 @@
 import React, { Fragment, useState } from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 // import withAuth from '../components/withAuth';
-import UserTable from './UserTable';
+import DateTable from './DateTable';
 import moment from 'moment-timezone';
 
-import { findUserDate } from '../Helpers/dbHandler';
+import { findDate } from '../Helpers/dbHandler';
 import { DatePicker } from '@material-ui/pickers';
 
-import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBIcon } from 'mdbreact';
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBTable,
+  MDBTableBody,
+  MDBTableHead,
+  MDBAlert,
+  MDBIcon,
+  MDBInput
+} from 'mdbreact';
 import { MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import { thisExpression } from '@babel/types';
-class UserPage extends React.Component {
+class DatePage extends React.Component {
   Helper = new HelperMethods();
   constructor(props) {
     super(props);
 
     this.state = {
-      dateData: [],
-      selectedMonth: this.loadSelectedMonth(),
+      dateData: {},
+      selectedDate: this.loadSelectedDate(),
       search: '',
       dataLoaded: true,
       alertMessage: '',
-      userId: '',
-      userData: {},
+      userData: [],
       token: '12346',
       validToken: true
     };
   }
 
   async componentDidMount() {
-    const { userId, dateQuery } = this.props.match.params;
-    if (dateQuery) {
-      const [dd, mm, yy] = this.praseDate(dateQuery);
-      this.setState({ selectedMonth: moment([yy, mm - 1, dd]) });
-    }
-    if (userId) {
-      try {
-        await this.axiosUserData(userId, dateQuery);
-        this.setState({ dataLoaded: true });
-      } catch (err) {
-        this.setState({ dataLoaded: false });
-      }
+    try {
+      await this.axiosUserData(this.state.selectedDate);
+      this.setState({ dataLoaded: true });
+    } catch (err) {
+      this.setState({ dataLoaded: false });
     }
   }
 
-  praseDate = date => {
-    return date.split('-').map(d => parseInt(d, 10));
-  };
-
-  loadSelectedMonth = () => {
-    let selectedMonth = sessionStorage.getItem('selectedMonth');
-    if (selectedMonth) {
-      return moment(selectedMonth);
+  loadSelectedDate = () => {
+    const selectedDate = sessionStorage.getItem('selectedDate');
+    if (selectedDate) {
+      return moment(selectedDate);
     }
-    return selectedMonth ? moment(selectedMonth) : moment();
+    let date = moment().subtract(1, 'day');
+    if (date.format('ddd') == 'Sat') return date.subtract(1, 'day');
+    if (date.format('ddd') == 'Sun') return date.subtract(2, 'day');
+    return date;
   };
 
-  axiosUserData = async (userId, selectedMonth) => {
-    const userDateData = await findUserDate(userId, selectedMonth);
-
-    const { dateData } = userDateData;
-    userDateData.dateData = undefined;
-    this.setState({ dateData, userData: userDateData });
+  axiosUserData = async selectedDate => {
+    selectedDate = selectedDate.format('DD/MM/YYYY');
+    let dateData = await findDate(selectedDate);
+    const userData = dateData.users;
+    dateData.users = undefined;
+    this.setState({ userData, dateData });
   };
 
   handleSearchChange = e => {
@@ -81,12 +82,11 @@ class UserPage extends React.Component {
     }
   };
 
-  handleMonthChange = async event => {
+  handleDateChange = async event => {
     try {
-      this.setState({ selectedMonth: event });
-      sessionStorage.setItem('selectedMonth', event);
-      const { uid } = this.state.userData;
-      await this.axiosUserData(uid, event);
+      this.setState({ selectedDate: event });
+      await this.axiosUserData(event);
+      sessionStorage.setItem('selectedDate', event);
       this.setState({ dataLoaded: true });
     } catch (err) {
       this.setState({ dataLoaded: false });
@@ -98,7 +98,7 @@ class UserPage extends React.Component {
       userData,
       dateData,
       dataLoaded,
-      selectedMonth,
+      selectedDate,
       validToken
     } = this.state;
 
@@ -109,21 +109,16 @@ class UserPage extends React.Component {
             <MDBCard style={{ marginTop: '20px' }}>
               <MDBRow className="mx-3 mt-4">
                 <MDBCol size="5">
-                  {Object.keys(userData).length ? (
-                    <h2>
-                      {userData.uid}: {userData.firstName} {userData.lastName}
-                    </h2>
-                  ) : null}
+                  <h2>{selectedDate.format('DD MMM YYYY')}</h2>
                 </MDBCol>
                 <MDBCol size="3">
                   <DatePicker
-                    views={['year', 'month']}
-                    label="Month"
-                    disabled={!userData}
+                    label="Date"
+                    // disabled={!userData}
                     minDate={new Date('2017-01-01')}
                     maxDate={new Date()}
-                    value={selectedMonth}
-                    onChange={this.handleMonthChange}
+                    value={selectedDate}
+                    onChange={this.handleDateChange}
                   />
                 </MDBCol>
                 <MDBCol size="4">
@@ -144,9 +139,9 @@ class UserPage extends React.Component {
 
               <MDBCardBody>
                 {!dataLoaded ? (
-                  <MDBAlert color="danger">User not found</MDBAlert>
+                  <MDBAlert color="danger">No date data</MDBAlert>
                 ) : null}
-                <UserTable
+                <DateTable
                   dateData={dateData}
                   validToken={validToken}
                   userData={userData}
@@ -159,4 +154,4 @@ class UserPage extends React.Component {
     );
   }
 }
-export { UserPage };
+export { DatePage };

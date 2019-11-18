@@ -11,7 +11,7 @@ import {
 import NavBar from '../components/NavBar';
 import { LoginPage } from '../LoginPage';
 import { CreateAccPage } from '../CreateAccPage';
-import { DashboardPage } from '../AdminPage';
+import { DatePage } from '../DatePage';
 import { UserPage } from '../UsersPage';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import MomentUtils from '@date-io/moment';
@@ -35,7 +35,7 @@ class App extends React.Component {
     const DefaultContainer = () => (
       <div>
         {/* <NavBar /> */}
-        <Route path="/" component={DashboardPage} />
+        <Route path="/date" component={DatePage} />
 
         <Route
           path="/logout"
@@ -55,6 +55,7 @@ class App extends React.Component {
           <Switch>
             <Route path="/login" component={LoginPage} />
             <Route path="/signup" component={CreateAccPage} />
+            <Route path="/users/:userId/:dateQuery" component={UserPage} />
             <Route path="/users/:userId" component={UserPage} />
             <Route path="/users" component={UserPage} />
             <Route path="/*" component={DefaultContainer} />

@@ -38,7 +38,7 @@ class NavBar extends Component {
         <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
           <MDBNavbarNav left>
             <MDBNavItem>
-              <MDBNavLink to="/">Admin</MDBNavLink>
+              <MDBNavLink to="/date">Date</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
               <MDBNavLink to="/users">User</MDBNavLink>
