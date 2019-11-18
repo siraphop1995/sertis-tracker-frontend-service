@@ -4,7 +4,7 @@ import HelperMethods from '../Helpers/HelperMethods';
 import UserTable from './UserTable';
 
 import { findUserDate } from '../Helpers/dbHandler';
-import { DatePicker } from '@material-ui/pickers';
+import { DatePicker, TimePicker } from '@material-ui/pickers';
 
 import {
   MDBContainer,
@@ -27,6 +27,7 @@ class UserPage extends React.Component {
     this.state = {
       dateData: [],
       selectedMonth: new Date(),
+      selectedTime: new Date(),
       search: '',
       dataLoaded: true,
       alertMessage: '',
@@ -76,8 +77,8 @@ class UserPage extends React.Component {
 
   handleMonthChange = async event => {
     try {
+      console.log(event);
       this.setState({ selectedMonth: event });
-      console.log(this.state.selectedMonth);
       const { uid } = this.state.userData;
       await this.axiosUserData(uid, event);
       this.setState({ dataLoaded: true });
@@ -86,12 +87,18 @@ class UserPage extends React.Component {
     }
   };
 
+  handleTimeChange = async event => {
+    console.log(new Date(event));
+    this.setState({ selectedTime: event });
+  };
+
   render() {
     const {
       userData,
       dateData,
       dataLoaded,
       selectedMonth,
+      selectedTime,
       validToken
     } = this.state;
 
@@ -117,6 +124,13 @@ class UserPage extends React.Component {
                     maxDate={new Date()}
                     value={selectedMonth}
                     onChange={this.handleMonthChange}
+                  />
+                  <TimePicker
+                    clearable
+                    ampm={false}
+                    label="24 hours"
+                    value={selectedTime}
+                    onChange={this.handleTimeChange}
                   />
                 </MDBCol>
                 <MDBCol size="4">

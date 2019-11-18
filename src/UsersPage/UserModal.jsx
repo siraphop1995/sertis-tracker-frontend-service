@@ -56,8 +56,8 @@ class EditModal extends React.Component {
         let { userData, userDate } = this.state;
 
         const res = await updateDateUser(userData, userDate);
-        this.props.onUpdate(userData, userDate)
-        this.props.toggle()
+        this.props.onUpdate(userData, userDate);
+        this.props.toggle();
       }
     } catch (err) {
       console.error(err);
@@ -75,10 +75,10 @@ class EditModal extends React.Component {
         isValid = this._validTime(value);
         break;
       case 'expectedWorkTime':
-        isValid = this._validWork(value);
+        isValid = this._validTime(value);
         break;
       case 'actualWorkTime':
-        isValid = this._validWork(value);
+        isValid = this._validTime(value);
         break;
     }
 
@@ -99,20 +99,6 @@ class EditModal extends React.Component {
     });
   };
   _validTime = value => {
-    return value.length !== 8
-      ? false
-      : value.split(':').length !== 3
-      ? false
-      : isNaN(value.split(':')[0])
-      ? false
-      : isNaN(value.split(':')[1])
-      ? false
-      : isNaN(value.split(':')[2])
-      ? false
-      : true;
-  };
-
-  _validWork = value => {
     return value.length !== 5
       ? false
       : value.split(':').length !== 2
@@ -123,8 +109,6 @@ class EditModal extends React.Component {
       ? false
       : true;
   };
-
-  
 
   render() {
     const { userDate, userData } = this.state;
@@ -151,6 +135,12 @@ class EditModal extends React.Component {
                       onSubmit={this.submitHandler}
                       noValidate
                     >
+                      {userData.data ? (
+                        <MDBRow>
+                          <p>line</p>
+                          {/* <p>{userData.data.lineMessage}</p> */}
+                        </MDBRow>
+                      ) : null}
                       <MDBRow>
                         <MDBCol md="4" lg="3" className="mb-3">
                           <label className="grey-text">inTime</label>
@@ -163,7 +153,7 @@ class EditModal extends React.Component {
                             required
                           />
                           <div className="invalid-feedback">
-                            Wrong format, please use [hh:mm:ss]
+                            Wrong format, please use [hh:mm]
                           </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
@@ -177,7 +167,7 @@ class EditModal extends React.Component {
                             required
                           />
                           <div className="invalid-feedback">
-                            Wrong format, please use [hh:mm:ss]
+                            Wrong format, please use [hh:mm]
                           </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">

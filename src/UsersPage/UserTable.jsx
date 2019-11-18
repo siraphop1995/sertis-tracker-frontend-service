@@ -102,6 +102,7 @@ class UserTable extends React.Component {
               <th scope="col">outTime</th>
               <th scope="col">expectWork</th>
               <th scope="col">actualWork</th>
+              <th scope="col">line</th>
               <th scope="col">status</th>
               <th scope="col">action</th>
             </tr>
@@ -109,12 +110,19 @@ class UserTable extends React.Component {
 
           <MDBTableBody>
             {dateData.map(data => {
-              let color =
+              let color = 'table-light';
+              let isLine = '';
+              if (data.data.status) {
+                isLine = data.data.lineMessage ? 'Yes' : 'No';
+                color = data.data.lineMessage ? 'table-success' : color;
+              }
+              color =
                 data.data.status === 'incomplete'
                   ? 'table-danger'
                   : data.data.status === 'overtime'
                   ? 'table-warning'
                   : 'table-light';
+
               return (
                 <tr key={data.date} className={color}>
                   <th>{data.date}</th>
@@ -122,6 +130,7 @@ class UserTable extends React.Component {
                   <td>{data.data.outTime}</td>
                   <td>{data.data.expectedWorkTime}</td>
                   <td>{data.data.actualWorkTime}</td>
+                  <td>{isLine}</td>
                   <td>{data.data.status}</td>
                   <td>
                     <span>
