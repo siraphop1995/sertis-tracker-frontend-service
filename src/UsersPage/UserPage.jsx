@@ -30,14 +30,17 @@ class UserPage extends React.Component {
 
   async componentDidMount() {
     const { userId, dateQuery } = this.props.match.params;
-    if (dateQuery) {
-      const [dd, mm, yy] = this.praseDate(dateQuery);
-      this.setState({ selectedMonth: moment([yy, mm - 1, dd]) });
-    }
     if (userId) {
       try {
-        const { selectedMonth } = this.state;
-        await this.axiosUserData(userId, selectedMonth);
+        if (dateQuery) {
+          const [dd, mm, yy] = this.praseDate(dateQuery);
+          this.setState({ selectedMonth: moment([yy, mm - 1, dd]) });
+          await this.axiosUserData(userId, moment([yy, mm - 1, dd]));
+        } else {
+          const { selectedMonth } = this.state;
+          await this.axiosUserData(userId, selectedMonth);
+        }
+
         this.setState({ dataLoaded: true });
       } catch (err) {
         this.setState({ dataLoaded: false });
