@@ -86,7 +86,12 @@ class DatePage extends React.Component {
     try {
       this.setState({ selectedDate: event });
       await this.axiosUserData(event);
-      sessionStorage.setItem('selectedDate', event);
+      sessionStorage.setItem(
+        'selectedDate',
+        moment(event)
+          .tz('Asia/Bangkok')
+          .format()
+      );
       this.setState({ dataLoaded: true });
     } catch (err) {
       this.setState({ dataLoaded: false });

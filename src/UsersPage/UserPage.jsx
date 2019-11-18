@@ -36,7 +36,8 @@ class UserPage extends React.Component {
     }
     if (userId) {
       try {
-        await this.axiosUserData(userId, dateQuery);
+        const { selectedMonth } = this.state;
+        await this.axiosUserData(userId, selectedMonth);
         this.setState({ dataLoaded: true });
       } catch (err) {
         this.setState({ dataLoaded: false });
@@ -50,13 +51,12 @@ class UserPage extends React.Component {
 
   loadSelectedMonth = () => {
     let selectedMonth = sessionStorage.getItem('selectedMonth');
-    if (selectedMonth) {
-      return moment(selectedMonth);
-    }
+    console.log(selectedMonth);
     return selectedMonth ? moment(selectedMonth) : moment();
   };
 
   axiosUserData = async (userId, selectedMonth) => {
+    console.log(selectedMonth);
     const userDateData = await findUserDate(userId, selectedMonth);
 
     const { dateData } = userDateData;
@@ -77,19 +77,24 @@ class UserPage extends React.Component {
       await this.axiosUserData(search);
       this.setState({ dataLoaded: true });
     } catch (err) {
-      this.setState({ dataLoaded: false });
+      this.setState({ dataLoaded: false, dateData: [] });
     }
   };
 
   handleMonthChange = async event => {
     try {
       this.setState({ selectedMonth: event });
-      sessionStorage.setItem('selectedMonth', event);
+      sessionStorage.setItem(
+        'selectedMonth',
+        moment(event)
+          .tz('Asia/Bangkok')
+          .format()
+      );
       const { uid } = this.state.userData;
       await this.axiosUserData(uid, event);
       this.setState({ dataLoaded: true });
     } catch (err) {
-      this.setState({ dataLoaded: false });
+      this.setState({ dataLoaded: false, dateData: [] });
     }
   };
 
@@ -144,7 +149,7 @@ class UserPage extends React.Component {
 
               <MDBCardBody>
                 {!dataLoaded ? (
-                  <MDBAlert color="danger">User not found</MDBAlert>
+                  <MDBAlert color="danger">User data not found</MDBAlert>
                 ) : null}
                 <UserTable
                   dateData={dateData}

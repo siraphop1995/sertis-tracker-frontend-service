@@ -124,54 +124,69 @@ class DateTable extends React.Component {
 
           <MDBTableBody>
             {userData.map(data => {
-              let color = 'table-light';
-              let isLine = '';
-              if (data.data.status) {
-                isLine = data.data.lineMessage ? 'Yes' : 'No';
-                color = data.data.lineMessage ? 'table-success' : color;
-              }
-              color =
-                data.data.status === 'incomplete'
-                  ? 'table-danger'
-                  : data.data.status === 'overtime'
-                  ? 'table-warning'
-                  : 'table-light';
+              if (data.data) {
+                let color = 'table-light';
+                let isLine = '';
+                if (data.data.status) {
+                  isLine = data.data.lineMessage ? 'Yes' : 'No';
+                  color = data.data.lineMessage ? 'table-success' : color;
+                }
+                color =
+                  data.data.status === 'incomplete'
+                    ? 'table-danger'
+                    : data.data.status === 'overtime'
+                    ? 'table-warning'
+                    : 'table-light';
 
-              return (
-                <tr key={data.uid} className={color}>
-                  <th>{data.uid}</th>
-                  <td>{data.data.inTime}</td>
-                  <td>{data.data.outTime}</td>
-                  <td>{data.data.expectedWorkTime}</td>
-                  <td>{data.data.actualWorkTime}</td>
-                  <td>{isLine}</td>
-                  <td>{data.data.status}</td>
-                  <td>
-                    <span>
-                      {validToken ? (
-                        <div className="mx-0">
-                          <MDBBtn
-                            color="success"
-                            size="sm"
-                            className="my-0 py-1"
-                            onClick={() => this.toUserPage(data)}
-                          >
-                            <MDBIcon icon="user" />
-                          </MDBBtn>
-                          <MDBBtn
-                            color="warning"
-                            size="sm"
-                            className="my-0 py-1"
-                            onClick={() => this.toggleModal(data)}
-                          >
-                            <MDBIcon icon="edit" />
-                          </MDBBtn>
-                        </div>
-                      ) : null}
-                    </span>
-                  </td>
-                </tr>
-              );
+                return (
+                  <tr key={data.uid} className={color}>
+                    <th>{data.uid}</th>
+                    <td>{data.data.inTime}</td>
+                    <td>{data.data.outTime}</td>
+                    <td>{data.data.expectedWorkTime}</td>
+                    <td>{data.data.actualWorkTime}</td>
+                    <td>{isLine}</td>
+                    <td>{data.data.status}</td>
+                    <td>
+                      <span>
+                        {validToken ? (
+                          <div className="mx-0">
+                            <MDBBtn
+                              color="success"
+                              size="sm"
+                              className="my-0 py-1"
+                              onClick={() => this.toUserPage(data)}
+                            >
+                              <MDBIcon icon="user" />
+                            </MDBBtn>
+                            <MDBBtn
+                              color="warning"
+                              size="sm"
+                              className="my-0 py-1"
+                              onClick={() => this.toggleModal(data)}
+                            >
+                              <MDBIcon icon="edit" />
+                            </MDBBtn>
+                          </div>
+                        ) : null}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              } else {
+                return (
+                  <tr key={data.uid} className="table-danger">
+                    <th>{data.uid}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                );
+              }
             })}
           </MDBTableBody>
         </MDBTable>
