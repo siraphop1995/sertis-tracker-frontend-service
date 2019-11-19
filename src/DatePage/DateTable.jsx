@@ -8,7 +8,8 @@ import {
   MDBTableBody,
   MDBTableHead,
   MDBIcon,
-  MDBBtn
+  MDBBtn,
+  MDBBadge
 } from 'mdbreact';
 
 class DateTable extends React.Component {
@@ -66,7 +67,7 @@ class DateTable extends React.Component {
     });
   };
 
-  updateHandler = (userDate) => {
+  updateHandler = userDate => {
     const { userData } = this.state;
     this.setState({
       userData: userData.map(u => (u.uid === userDate.uid ? userDate : u))
@@ -105,7 +106,9 @@ class DateTable extends React.Component {
                 let color = 'table-light';
                 let isLine = '';
                 if (data.data.status) {
-                  isLine = data.data.lineMessage ? 'Yes' : 'No';
+                  isLine = data.data.lineMessage ? (
+                    <MDBBadge color="success">L</MDBBadge>
+                  ) : null;
                   color = data.data.lineMessage ? 'table-success' : color;
                 }
                 color =
@@ -129,7 +132,7 @@ class DateTable extends React.Component {
                         {validToken ? (
                           <div className="mx-0">
                             <MDBBtn
-                              color="success"
+                              color="primary"
                               size="sm"
                               className="my-0 py-1"
                               onClick={() => this.toUserPage(data)}
