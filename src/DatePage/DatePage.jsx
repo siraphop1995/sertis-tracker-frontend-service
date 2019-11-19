@@ -32,6 +32,8 @@ class DatePage extends React.Component {
       dataLoaded: true,
       alertMessage: '',
       userData: [],
+      defaultUserData: [],
+      filteredUserData: [],
       token: '12346',
       validToken: true
     };
@@ -57,6 +59,12 @@ class DatePage extends React.Component {
     return date;
   };
 
+  loadUserData = () => {
+    console.log(this.state);
+    // const { defaultUserData, filteredUserData } = this.state;
+    return [];
+  };
+
   axiosUserData = async selectedDate => {
     selectedDate = selectedDate.format('DD/MM/YYYY');
     let dateData = await findDate(selectedDate);
@@ -72,7 +80,7 @@ class DatePage extends React.Component {
     });
   };
 
-  handleSearch = async () => {
+  asynchandleSearch = () => {
     const { userSearch, userData } = this.state;
     console.log(userSearch);
     console.log(userData);
@@ -145,7 +153,9 @@ class DatePage extends React.Component {
                 <DateTable
                   dateData={dateData}
                   validToken={validToken}
-                  userData={userData}
+                  userData={userData.filter(u =>
+                    userSearch ? u.uid.includes(userSearch) : u
+                  )}
                 />
               </MDBCardBody>
             </MDBCard>
