@@ -18,7 +18,7 @@ class UserPage extends React.Component {
     this.state = {
       dateData: [],
       selectedMonth: this.loadSelectedMonth(),
-      search: '',
+      userSearch: '',
       dataLoaded: true,
       alertMessage: '',
       userId: '',
@@ -29,7 +29,10 @@ class UserPage extends React.Component {
   }
 
   async componentDidMount() {
-    const { userId, dateQuery } = this.props.match.params;
+    let { userId, dateQuery } = this.props.match.params;
+    if (!userId) {
+      userId = this.loadUserSearch();
+    }
     if (userId) {
       try {
         if (dateQuery) {
@@ -54,12 +57,14 @@ class UserPage extends React.Component {
 
   loadSelectedMonth = () => {
     let selectedMonth = sessionStorage.getItem('selectedMonth');
-    console.log(selectedMonth);
     return selectedMonth ? moment(selectedMonth) : moment();
+  };
+  loadUserSearch = () => {
+    let userSearch = sessionStorage.getItem('userSearch');
+    return userSearch ? userSearch : '';
   };
 
   axiosUserData = async (userId, selectedMonth) => {
-    console.log(selectedMonth);
     const userDateData = await findUserDate(userId, selectedMonth);
 
     const { dateData } = userDateData;
@@ -76,8 +81,9 @@ class UserPage extends React.Component {
 
   handleSearch = async () => {
     try {
-      const { search } = this.state;
-      await this.axiosUserData(search);
+      const { userSearch, selectedMonth } = this.state;
+      await this.axiosUserData(userSearch, selectedMonth);
+      sessionStorage.setItem('userSearch', userSearch);
       this.setState({ dataLoaded: true });
     } catch (err) {
       this.setState({ dataLoaded: false, dateData: [] });
@@ -138,7 +144,7 @@ class UserPage extends React.Component {
                   <div className="md-form my-0">
                     <input
                       className="form-control mr-sm-2"
-                      name="search"
+                      name="userSearch"
                       onChange={this.handleSearchChange}
                       type="text"
                       placeholder="Search"

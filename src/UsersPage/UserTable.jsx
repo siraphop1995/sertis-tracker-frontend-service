@@ -98,7 +98,9 @@ class UserTable extends React.Component {
               let isLine = '';
               if (data.data.status) {
                 isLine = data.data.lineMessage ? (
-                  <MDBBadge color="success">L</MDBBadge>
+                  <MDBBadge color="success">
+                    <MDBIcon far icon="comment-dots" size="2x" />
+                  </MDBBadge>
                 ) : null;
                 color = data.data.lineMessage ? 'table-success' : color;
               }
