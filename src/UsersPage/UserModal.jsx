@@ -54,9 +54,12 @@ class UserModal extends React.Component {
       if (this.validate()) {
         console.log('Valid!!!!');
         let { userData, userDate } = this.state;
+        const { uid } = userData;
+        const { did } = userDate;
+        const newData = userDate.data;
 
-        const res = await updateDateUser(userData, userDate);
-        this.props.onUpdate(userData, userDate);
+        await updateDateUser(did, uid, newData);
+        this.props.onUpdate(userDate);
         this.props.toggle();
       }
     } catch (err) {
@@ -136,7 +139,7 @@ class UserModal extends React.Component {
                       noValidate
                     >
                       <MDBRow className="mb-1">
-                        <MDBCol md="12" lg="12" >
+                        <MDBCol md="12" lg="12">
                           <label className="grey-text">Line message</label>
                           <p className="text-justify">
                             {userDate.data.lineMessage}

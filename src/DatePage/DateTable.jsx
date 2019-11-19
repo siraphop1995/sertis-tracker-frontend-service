@@ -66,39 +66,22 @@ class DateTable extends React.Component {
     });
   };
 
-  updateHandler = (userData, userDate) => {
-    console.log('updatehandler');
-    console.log(userData);
-    console.log(userDate);
-    console.log(this.state.dateData);
-
+  updateHandler = (userDate) => {
+    const { userData } = this.state;
     this.setState({
-      dateData: this.state.dateData.map(d => {
-        if (d.did === userDate.did) {
-          d.data = userDate.data;
-        }
-        return d;
-      })
+      userData: userData.map(u => (u.uid === userDate.uid ? userDate : u))
     });
-
-    this.setState({
-      dateData: this.state.dateData.map(d =>
-        d.did === userDate.did ? userDate : d
-      )
-    });
-
-    console.log(this.state.dateData);
   };
 
   render() {
-    const { dateData, validToken, userData } = this.state;
+    const { dateData, validToken, userData, userDate } = this.state;
 
     return (
       <div>
         <DateModal
           modal={this.state.modal}
-          userDate={this.state.userDate}
-          userData={this.state.userData}
+          userDate={userDate}
+          dateData={dateData}
           toggle={this.toggleModal}
           onUpdate={this.updateHandler}
         />

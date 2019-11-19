@@ -58,28 +58,11 @@ class UserTable extends React.Component {
     });
   };
 
-  updateHandler = (userData, userDate) => {
-    console.log('updatehandler');
-    console.log(userData);
-    console.log(userDate);
-    console.log(this.state.dateData);
-
+  updateHandler = (userDate) => {
+    const { dateData } = this.state;
     this.setState({
-      dateData: this.state.dateData.map(d => {
-        if (d.did === userDate.did) {
-          d.data = userDate.data;
-        }
-        return d;
-      })
+      dateData: dateData.map(d => (d.did === userDate.did ? userDate : d))
     });
-
-    this.setState({
-      dateData: this.state.dateData.map(d =>
-        d.did === userDate.did ? userDate : d
-      )
-    });
-
-    console.log(this.state.dateData);
   };
 
   render() {

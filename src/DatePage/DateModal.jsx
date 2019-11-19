@@ -27,6 +27,7 @@ class DateModal extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log(this.props);
     if (this.props.modal !== prevProps.modal) {
       this.setState({
         modal: this.props.modal
@@ -38,10 +39,10 @@ class DateModal extends React.Component {
         userDate: this.props.userDate
       });
     }
-    if (this.props.userData !== prevProps.userData) {
-      console.log(this.props.userData);
+    if (this.props.dateData !== prevProps.dateData) {
+      console.log(this.props.dateData);
       this.setState({
-        userData: this.props.userData
+        dateData: this.props.dateData
       });
     }
   }
@@ -52,10 +53,14 @@ class DateModal extends React.Component {
       event.target.className += ' was-validated';
       if (this.validate()) {
         console.log('Valid!!!!');
-        let { userData, userDate } = this.state;
+        let { dateData, userDate } = this.state;
 
-        const res = await updateDateUser(userData, userDate);
-        this.props.onUpdate(userData, userDate);
+        const { uid } = userDate;
+        const did = dateData._id;
+        const newData = userDate.data;
+
+        await updateDateUser(did, uid, newData);
+        this.props.onUpdate(userDate);
         this.props.toggle();
       }
     } catch (err) {
@@ -110,7 +115,7 @@ class DateModal extends React.Component {
   };
 
   render() {
-    const { userDate, userData } = this.state;
+    const { userDate, dateData } = this.state;
 
     return (
       <div>
@@ -122,7 +127,7 @@ class DateModal extends React.Component {
             size="lg"
           >
             <MDBModalHeader toggle={this.props.toggle}>
-              {userData.firstName} {userData.lastName} {userDate.date}
+              {/* {userData.firstName} {userData.lastName} {userDate.date} */}
             </MDBModalHeader>
             <MDBModalBody>
               <MDBContainer>

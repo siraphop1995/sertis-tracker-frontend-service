@@ -17,11 +17,12 @@ export async function getUserList() {
   });
 }
 
-export async function updateDateUser(userData, userDate) {
+export async function updateDateUser(did, uid, newData) {
   return (
     await axios.post(`${DATE_SERVER}/updateDateUser`, {
-      userData: userData,
-      userDate: userDate
+      uid: uid,
+      did: did,
+      newData: newData
     })
   ).data;
 }
@@ -36,7 +37,7 @@ export async function findUserDate(userId, monthQuery) {
 }
 
 export async function findDate(dateQuery) {
-  console.log(dateQuery)
+  console.log(dateQuery);
   return (
     await axios.post(`${DATE_SERVER}/findDate`, {
       dateQuery: dateQuery
