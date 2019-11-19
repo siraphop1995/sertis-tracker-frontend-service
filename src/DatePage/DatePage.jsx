@@ -80,12 +80,6 @@ class DatePage extends React.Component {
     });
   };
 
-  asynchandleSearch = () => {
-    const { userSearch, userData } = this.state;
-    console.log(userSearch);
-    console.log(userData);
-  };
-
   handleDateChange = async event => {
     try {
       this.setState({ selectedDate: event });
@@ -140,9 +134,6 @@ class DatePage extends React.Component {
                       placeholder="Search"
                     />
                   </div>
-                  <MDBBtn color="info" size="sm" onClick={this.handleSearch}>
-                    <MDBIcon icon="search" />
-                  </MDBBtn>
                 </MDBCol>
               </MDBRow>
 
