@@ -5,7 +5,7 @@ export default class AuthHelperMethods {
   login = async loginData => {
     try {
       return await axios
-        .post(`/login`, loginData)
+        .post(`http://localhost:7001/login`, loginData)
         .then(res => {
           this.setToken(res.data.token);
           return Promise.resolve(res);

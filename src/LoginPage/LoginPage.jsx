@@ -19,14 +19,7 @@ class LoginPage extends Component {
     };
   }
 
-  async componentDidMount() {
-    try {
-      const res = await axios('/test');
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  async componentDidMount() {}
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -59,13 +52,18 @@ class LoginPage extends Component {
 
   handleStatusCode = err => {
     let errors = this.state.errors;
-    switch (err.response.status) {
-      case 401:
-        errors = 'Username or password are incorrect';
-        break;
-      default:
-        this.Helper.errorHandler(err);
-        break;
+    console.log(err);
+    if (!err.response) {
+      errors = 'Server fail, please check server status';
+    } else {
+      switch (err.response.status) {
+        case 401:
+          errors = 'Username or password are incorrect';
+          break;
+        default:
+          this.Helper.errorHandler(err);
+          break;
+      }
     }
 
     this.setState({
@@ -87,49 +85,49 @@ class LoginPage extends Component {
               <div className="card-body">
                 <h5 className="card-title text-center">Login</h5>
                 <form className="form-signin">
-                  <img
-                    className="mb-4"
-                    src="{{ site.baseurl }}/docs/{{
-      site.docs_version
-    }}/assets/brand/bootstrap-solid.svg"
-                    alt=""
-                    width="72"
-                    height="72"
-                  />
-                  {/* <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1> */}
-                  <label htmlFor="inputUsername" className="sr-only">
-                  Username
-                  </label>
-                  <input
-                    id="inputUsername"
-                    className="form-control"
-                    placeholder="Username"
-                    required
-                    autoFocus
-                  />
-                  <label htmlFor="inputPassword" className="sr-only">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="inputPassword"
-                    className="form-control"
-                    placeholder="Password"
-                    required
-                  />
-                  <div className="checkbox mb-3">
-                    <label>
-                      {' '}
-                      <input type="checkbox" value="remember-me" /> Remember me{' '}
-                    </label>
+                  <div className="form-label-group">
+                    <label>Username</label>
+                    <input
+                      className="form-control"
+                      placeholder="Username"
+                      required
+                      autoFocus
+                      name="username"
+                      onChange={this.handleChange}
+                    />
                   </div>
+
+                  <div className="form-label-group">
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Password"
+                      required
+                      name="password"
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                  {this.state.errors.length > 0 && (
+                    <span className="text-danger">{this.state.errors}</span>
+                  )}
+                  {this.state.errors.length === 0 && (
+                    <div className="text-light">invisible</div>
+                  )}
+                  <div className="text-light">invisible</div>
                   <button
-                    className="btn btn-lg btn-primary btn-block"
-                    type="submit"
+                    className="mt-60 pt-50 btn btn-lg btn-primary btn-block text-uppercase"
+                    onClick={this.handleSubmit}
                   >
                     Sign in
                   </button>
-                  {/* <p class="mt-5 mb-3 text-muted">&copy; 2017-{{ site.time | date: "%Y" }}</p> */}
+                  <hr className="my-4" />
+                  <button
+                    className="btn btn-lg btn-block text-uppercase"
+                    onClick={this.handleNewAccount}
+                  >
+                    <i className="fab mr-2" /> Create new account
+                  </button>
                 </form>
               </div>
             </div>

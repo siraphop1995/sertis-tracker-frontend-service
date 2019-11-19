@@ -5,16 +5,7 @@ const DATE_SERVER = 'http://localhost:7002';
 // const LINE_SERVER = 'http://localhost:7003'
 
 export async function getUserList() {
-  return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.map(user => {
-    return {
-      _id: user._id,
-      lid: user.lid,
-      uid: user.uid,
-      inTime: undefined,
-      outTime: undefined,
-      status: 'unverify'
-    };
-  });
+  return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.user;
 }
 
 export async function updateDateUser(did, uid, newData) {

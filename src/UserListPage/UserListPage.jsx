@@ -4,7 +4,7 @@ import HelperMethods from '../Helpers/HelperMethods';
 import UserListTable from './UserListTable';
 import moment from 'moment-timezone';
 
-import { findDate } from '../Helpers/dbHandler';
+import { getUserList } from '../Helpers/dbHandler';
 import { DatePicker } from '@material-ui/pickers';
 
 import { MDBContainer, MDBRow, MDBCol, MDBAlert } from 'mdbreact';
@@ -15,14 +15,9 @@ class UserListPage extends React.Component {
     super(props);
 
     this.state = {
-      dateData: {},
-      selectedDate: this.loadSelectedDate(),
       userSearch: '',
       dataLoaded: true,
-      alertMessage: '',
-      userData: [],
-      defaultUserData: [],
-      filteredUserData: [],
+      userListData: [],
       token: '12346',
       validToken: true
     };
@@ -30,36 +25,16 @@ class UserListPage extends React.Component {
 
   async componentDidMount() {
     try {
-      await this.axiosUserData(this.state.selectedDate);
+      await this.axiosUserData();
       this.setState({ dataLoaded: true });
     } catch (err) {
       this.setState({ dataLoaded: false });
     }
   }
 
-  loadSelectedDate = () => {
-    const selectedDate = sessionStorage.getItem('selectedDate');
-    if (selectedDate) {
-      return moment(selectedDate);
-    }
-    let date = moment().subtract(1, 'day');
-    if (date.format('ddd') == 'Sat') return date.subtract(1, 'day');
-    if (date.format('ddd') == 'Sun') return date.subtract(2, 'day');
-    return date;
-  };
-
-  loadUserData = () => {
-    console.log(this.state);
-    // const { defaultUserData, filteredUserData } = this.state;
-    return [];
-  };
-
-  axiosUserData = async selectedDate => {
-    selectedDate = selectedDate.format('DD/MM/YYYY');
-    let dateData = await findDate(selectedDate);
-    const userData = dateData.users;
-    dateData.users = undefined;
-    this.setState({ userData, dateData });
+  axiosUserData = async () => {
+    let userListData = await getUserList();
+    this.setState({ userListData });
   };
 
   handleSearchChange = e => {
@@ -69,31 +44,8 @@ class UserListPage extends React.Component {
     });
   };
 
-  handleDateChange = async event => {
-    try {
-      this.setState({ selectedDate: event });
-      await this.axiosUserData(event);
-      sessionStorage.setItem(
-        'selectedDate',
-        moment(event)
-          .tz('Asia/Bangkok')
-          .format()
-      );
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false });
-    }
-  };
-
   render() {
-    const {
-      userData,
-      dateData,
-      dataLoaded,
-      selectedDate,
-      validToken,
-      userSearch
-    } = this.state;
+    const { userListData, dataLoaded, validToken, userSearch } = this.state;
 
     return (
       <div>
@@ -102,17 +54,9 @@ class UserListPage extends React.Component {
             <MDBCard style={{ marginTop: '20px' }}>
               <MDBRow className="mx-3 mt-4">
                 <MDBCol size="5">
-                  <h2>{selectedDate.format('DD MMM YYYY')}</h2>
+                  <h2>User List</h2>
                 </MDBCol>
-                <MDBCol size="3">
-                  <DatePicker
-                    label="Date"
-                    minDate={new Date('2017-01-01')}
-                    maxDate={new Date()}
-                    value={selectedDate}
-                    onChange={this.handleDateChange}
-                  />
-                </MDBCol>
+                <MDBCol size="3"></MDBCol>
                 <MDBCol size="4">
                   <div className="md-form my-0">
                     <input
@@ -128,12 +72,11 @@ class UserListPage extends React.Component {
 
               <MDBCardBody>
                 {!dataLoaded ? (
-                  <MDBAlert color="danger">No date data</MDBAlert>
+                  <MDBAlert color="danger">No user data</MDBAlert>
                 ) : null}
                 <UserListTable
-                  dateData={dateData}
                   validToken={validToken}
-                  userData={userData.filter(u =>
+                  userListData={userListData.filter(u =>
                     userSearch ? u.uid.includes(userSearch) : u
                   )}
                 />
