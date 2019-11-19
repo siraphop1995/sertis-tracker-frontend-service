@@ -13,6 +13,8 @@ import { LoginPage } from '../LoginPage';
 import { CreateAccPage } from '../CreateAccPage';
 import { DatePage } from '../DatePage';
 import { UserPage } from '../UsersPage';
+import { UserListPage } from '../UserListPage';
+
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -58,6 +60,7 @@ class App extends React.Component {
             <Route path="/users/:userId/:dateQuery" component={UserPage} />
             <Route path="/users/:userId" component={UserPage} />
             <Route path="/users" component={UserPage} />
+            <Route path="/userlist" component={UserListPage} />
             <Route path="/*" component={DefaultContainer} />
           </Switch>
         </MuiPickersUtilsProvider>
