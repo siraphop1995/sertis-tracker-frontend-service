@@ -10,7 +10,7 @@ import {
   MDBModalFooter
 } from 'mdbreact';
 
-class UserModal extends React.Component {
+class DateModal extends React.Component {
   constructor(props) {
     super(props);
 
@@ -34,7 +34,6 @@ class UserModal extends React.Component {
     }
     if (this.props.userDate !== prevProps.userDate) {
       console.log(this.props.userDate);
-
       this.setState({
         userDate: this.props.userDate
       });
@@ -136,7 +135,7 @@ class UserModal extends React.Component {
                       noValidate
                     >
                       <MDBRow className="mb-1">
-                        <MDBCol md="12" lg="12" >
+                        <MDBCol md="12" lg="12">
                           <label className="grey-text">Line message</label>
                           <p className="text-justify">
                             {userDate.data.lineMessage}
@@ -260,4 +259,4 @@ class UserModal extends React.Component {
     );
   }
 }
-export default UserModal;
+export default DateModal;

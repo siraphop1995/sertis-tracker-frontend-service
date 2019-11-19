@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
-// import DateModal from './DateModal';
+import DateModal from './DateModal';
 
 import {
   MDBTable,
@@ -31,11 +31,7 @@ class DateTable extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('Update');
-
     if (this.props.dateData !== prevProps.dateData) {
-      console.log(this.props.dateData);
-
       this.setState({
         dateData: this.props.dateData
       });
@@ -46,8 +42,6 @@ class DateTable extends React.Component {
       });
     }
     if (this.props.userData !== prevProps.userData) {
-      console.log(this.props.userData);
-
       this.setState({
         userData: this.props.userData
       });
@@ -101,13 +95,13 @@ class DateTable extends React.Component {
 
     return (
       <div>
-        {/* <UserModal
+        <DateModal
           modal={this.state.modal}
           userDate={this.state.userDate}
           userData={this.state.userData}
           toggle={this.toggleModal}
           onUpdate={this.updateHandler}
-        /> */}
+        />
         <MDBTable hover small responsive>
           <MDBTableHead>
             <tr>

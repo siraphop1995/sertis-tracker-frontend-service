@@ -28,7 +28,7 @@ class DatePage extends React.Component {
     this.state = {
       dateData: {},
       selectedDate: this.loadSelectedDate(),
-      search: '',
+      userSearch: '',
       dataLoaded: true,
       alertMessage: '',
       userData: [],
@@ -73,13 +73,9 @@ class DatePage extends React.Component {
   };
 
   handleSearch = async () => {
-    try {
-      const { search } = this.state;
-      await this.axiosUserData(search);
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false });
-    }
+    const { userSearch, userData } = this.state;
+    console.log(userSearch);
+    console.log(userData);
   };
 
   handleDateChange = async event => {
@@ -104,7 +100,8 @@ class DatePage extends React.Component {
       dateData,
       dataLoaded,
       selectedDate,
-      validToken
+      validToken,
+      userSearch
     } = this.state;
 
     return (
@@ -119,7 +116,6 @@ class DatePage extends React.Component {
                 <MDBCol size="3">
                   <DatePicker
                     label="Date"
-                    // disabled={!userData}
                     minDate={new Date('2017-01-01')}
                     maxDate={new Date()}
                     value={selectedDate}
@@ -130,7 +126,7 @@ class DatePage extends React.Component {
                   <div className="md-form my-0">
                     <input
                       className="form-control mr-sm-2"
-                      name="search"
+                      name="userSearch"
                       onChange={this.handleSearchChange}
                       type="text"
                       placeholder="Search"
