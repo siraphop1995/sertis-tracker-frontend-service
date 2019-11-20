@@ -11,9 +11,10 @@ import {
 import NavBar from '../components/NavBar';
 import { LoginPage } from '../LoginPage';
 import { CreateAccPage } from '../CreateAccPage';
-import { DatePage } from '../DatePage';
+import { AuthDatePage } from '../DatePage';
 import { UserPage } from '../UsersPage';
-import { UserListPage } from '../UserListPage';
+import { AuthUserListPage } from '../UserListPage';
+import { NotFoundPage } from '../NotFoundPage';
 
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import MomentUtils from '@date-io/moment';
@@ -26,41 +27,40 @@ class App extends React.Component {
     this.state = {
       isLogin: this.Auth.loggedIn()
     };
-    console.log('App - constructor');
-  }
-
-  componentDidMount() {
-    console.log('App - Mounted');
   }
 
   render() {
     const DefaultContainer = () => (
       <div>
-        {/* <NavBar /> */}
-        <Route path="/date" component={DatePage} />
+        <Switch>
+          {/* <NavBar /> */}
 
-        <Route
-          path="/logout"
-          render={() => {
-            this.Auth.logout();
-            return <Redirect to="/login" />;
-          }}
-        />
+          <Route path="/date" component={AuthDatePage} />
+          <Route path="/userlist" component={AuthUserListPage} />
+
+          <Route
+            path="/logout"
+            render={() => {
+              this.Auth.logout();
+              return <Redirect to="/login" />;
+            }}
+          />
+          <Redirect exact from="/*" to="/users" />
+          <Route component={NotFoundPage} />
+        </Switch>
       </div>
     );
-    console.log('App - Rendered');
-    // console.log(this.Auth.getConfirm())
     return (
       <div>
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <NavBar />
           <Switch>
+            <Redirect exact from="/" to="/users" />
             <Route path="/login" component={LoginPage} />
             <Route path="/signup" component={CreateAccPage} />
             <Route path="/users/:userId/:dateQuery" component={UserPage} />
             <Route path="/users/:userId" component={UserPage} />
             <Route path="/users" component={UserPage} />
-            <Route path="/userlist" component={UserListPage} />
             <Route path="/*" component={DefaultContainer} />
           </Switch>
         </MuiPickersUtilsProvider>

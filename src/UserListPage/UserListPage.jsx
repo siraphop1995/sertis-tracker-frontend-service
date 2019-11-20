@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
-// import withAuth from '../components/withAuth';
+import withAuth from '../components/withAuth';
 import UserListTable from './UserListTable';
 import moment from 'moment-timezone';
 
@@ -88,4 +88,4 @@ class UserListPage extends React.Component {
     );
   }
 }
-export { UserListPage };
+export const AuthUserListPage = withAuth(UserListPage);

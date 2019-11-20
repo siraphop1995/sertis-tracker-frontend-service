@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
-// import withAuth from '../components/withAuth';
+import withAuth from '../components/withAuth';
 import DateTable from './DateTable';
 import moment from 'moment-timezone';
 
@@ -156,4 +156,4 @@ class DatePage extends React.Component {
     );
   }
 }
-export { DatePage };
+export const AuthDatePage = withAuth(DatePage);

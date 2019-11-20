@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import './LoginPage.css';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import HelperMethods from '../Helpers/HelperMethods';
-import axios from 'axios';
 
 class LoginPage extends Component {
   Auth = new AuthHelperMethods();
@@ -43,7 +42,7 @@ class LoginPage extends Component {
         if (res === false) {
           return alert("Sorry those credentials don't exist!");
         }
-        this.props.history.push('/');
+        this.props.history.push('/date');
       })
       .catch(error => {
         this.handleStatusCode(error);
