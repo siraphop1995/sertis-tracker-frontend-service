@@ -5,7 +5,14 @@ import UserListTable from './UserListTable';
 
 import { getUserList } from '../Helpers/dbHandler';
 
-import { MDBContainer, MDBRow, MDBCol, MDBAlert } from 'mdbreact';
+import {
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBAlert,
+  MDBBtn,
+  MDBIcon
+} from 'mdbreact';
 import { MDBCard, MDBCardBody } from 'mdbreact';
 class UserListPage extends React.Component {
   Helper = new HelperMethods();
@@ -42,6 +49,10 @@ class UserListPage extends React.Component {
     });
   };
 
+  handleAddUser = () => {
+    console.log('adduser');
+  };
+
   render() {
     const { userListData, dataLoaded, validToken, userSearch } = this.state;
 
@@ -51,11 +62,11 @@ class UserListPage extends React.Component {
           <MDBCol>
             <MDBCard style={{ marginTop: '20px' }}>
               <MDBRow className="mx-3 mt-4">
-                <MDBCol size="5">
+                <MDBCol md="5">
                   <h2>User List</h2>
                 </MDBCol>
-                <MDBCol size="3"></MDBCol>
-                <MDBCol size="4">
+                <MDBCol md="3" className="ml-md-auto"></MDBCol>
+                <MDBCol md="4">
                   <div className="md-form my-0">
                     <input
                       className="form-control mr-sm-2"
@@ -64,6 +75,9 @@ class UserListPage extends React.Component {
                       type="text"
                       placeholder="Search"
                     />
+                    <MDBBtn color="green" size="sm" onClick={this.handleAddUser}>
+                      <MDBIcon icon="user-plus" />
+                    </MDBBtn>
                   </div>
                 </MDBCol>
               </MDBRow>

@@ -8,6 +8,18 @@ export async function getUserList() {
   return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.user;
 }
 
+export async function updateUser(id, userData) {
+  let newData = {
+    firstName: userData.firstName,
+    lastName: userData.lastName
+  };
+  return (
+    await axios.patch(`${USER_SERVER}/updateUser/${id}`, {
+      ...newData
+    })
+  ).data;
+}
+
 export async function updateDateUser(did, uid, newData) {
   return (
     await axios.post(`${DATE_SERVER}/updateDateUser`, {

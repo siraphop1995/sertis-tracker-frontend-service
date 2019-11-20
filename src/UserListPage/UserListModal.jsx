@@ -1,5 +1,5 @@
 import React from 'react';
-import { updateDateUser } from '../Helpers/dbHandler';
+import { updateUser } from '../Helpers/dbHandler';
 
 import { MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 import {
@@ -18,7 +18,6 @@ class UserListModal extends React.Component {
 
     this.state = {
       modal: false,
-      userDate: { data: {} },
       userData: {}
     };
   }
@@ -27,22 +26,15 @@ class UserListModal extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props);
     if (this.props.modal !== prevProps.modal) {
       this.setState({
         modal: this.props.modal
       });
     }
-    if (this.props.userDate !== prevProps.userDate) {
-      console.log(this.props.userDate);
+    if (this.props.userData !== prevProps.userData) {
+      console.log(this.props.userData);
       this.setState({
-        userDate: this.props.userDate
-      });
-    }
-    if (this.props.dateData !== prevProps.dateData) {
-      console.log(this.props.dateData);
-      this.setState({
-        dateData: this.props.dateData
+        userData: this.props.userData
       });
     }
   }
@@ -53,14 +45,11 @@ class UserListModal extends React.Component {
       event.target.className += ' was-validated';
       if (this.validate()) {
         console.log('Valid!!!!');
-        let { dateData, userDate } = this.state;
-
-        const { uid } = userDate;
-        const did = dateData._id;
-        const newData = userDate.data;
-
-        await updateDateUser(did, uid, newData);
-        this.props.onUpdate(userDate);
+        let { userData } = this.state;
+        const id = userData._id;
+        
+        await updateUser(id, userData);
+        this.props.onUpdate(userData);
         this.props.toggle();
       }
     } catch (err) {
@@ -70,21 +59,7 @@ class UserListModal extends React.Component {
 
   changeHandler = event => {
     const { name, value } = event.target;
-    let isValid = true;
-    switch (name) {
-      case 'inTime':
-        isValid = this._validTime(value);
-        break;
-      case 'outTime':
-        isValid = this._validTime(value);
-        break;
-      case 'expectedWorkTime':
-        isValid = this._validTime(value);
-        break;
-      case 'actualWorkTime':
-        isValid = this._validTime(value);
-        break;
-    }
+    let isValid = this._validLength(value);
 
     if (isValid) {
       event.target.setCustomValidity('');
@@ -93,29 +68,19 @@ class UserListModal extends React.Component {
     }
 
     this.setState({
-      userDate: {
-        ...this.state.userDate,
-        data: {
-          ...this.state.userDate.data,
-          [name]: value
-        }
+      userData: {
+        ...this.state.userData,
+        [name]: value
       }
     });
   };
-  _validTime = value => {
-    return value.length !== 5
-      ? false
-      : value.split(':').length !== 2
-      ? false
-      : isNaN(value.split(':')[0])
-      ? false
-      : isNaN(value.split(':')[1])
-      ? false
-      : true;
+
+  _validLength = value => {
+    return value.length > 1 ? true : false;
   };
 
   render() {
-    const { userDate, dateData } = this.state;
+    const { userData } = this.state;
 
     return (
       <div>
@@ -127,7 +92,7 @@ class UserListModal extends React.Component {
             size="lg"
           >
             <MDBModalHeader toggle={this.props.toggle}>
-              {/* {userData.firstName} {userData.lastName} {userDate.date} */}
+              {userData.uid}
             </MDBModalHeader>
             <MDBModalBody>
               <MDBContainer>
@@ -139,84 +104,39 @@ class UserListModal extends React.Component {
                       onSubmit={this.submitHandler}
                       noValidate
                     >
-                      <MDBRow className="mb-1">
-                        <MDBCol md="12" lg="12">
-                          <label className="grey-text">Line message</label>
-                          <p className="text-justify">
-                            {userDate.data.lineMessage}
-                          </p>
-                        </MDBCol>
-                      </MDBRow>
                       <MDBRow>
-                        <MDBCol md="4" lg="3" className="mb-3">
-                          <label className="grey-text">inTime</label>
+                        <MDBCol md="3" lg="2">
+                          <label className="grey-text">Init Code</label>
+                          <p className="text-justify">{userData.initCode}</p>
+                        </MDBCol>
+                        <MDBCol md="9" lg="10">
+                          <label className="grey-text">Line Id</label>
+                          <p className="text-justify">{userData.lid}</p>
+                        </MDBCol>
+
+                        <MDBCol md="12" lg="6" className="mb-3">
+                          <label className="grey-text">firstName</label>
                           <input
-                            name="inTime"
-                            value={userDate.data.inTime}
+                            name="firstName"
+                            value={userData.firstName}
                             onChange={this.changeHandler}
                             type="text"
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Wrong format, please use [hh:mm]
-                          </div>
+                          <div className="invalid-feedback">Require</div>
                         </MDBCol>
-                        <MDBCol md="4" lg="3" className="mb-3">
-                          <label className="grey-text">outTime</label>
+                        <MDBCol md="12" lg="6" className="mb-3">
+                          <label className="grey-text">lastName</label>
                           <input
-                            name="outTime"
-                            value={userDate.data.outTime}
+                            name="lastName"
+                            value={userData.lastName}
                             onChange={this.changeHandler}
                             type="text"
                             className="form-control"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Wrong format, please use [hh:mm]
-                          </div>
-                        </MDBCol>
-                        <MDBCol md="4" lg="3" className="mb-3">
-                          <label className="grey-text">expectedWork</label>
-                          <input
-                            name="expectedWorkTime"
-                            value={userDate.data.expectedWorkTime}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            required
-                          />
-                          <div className="invalid-feedback">
-                            Wrong format, please use [hh:mm]
-                          </div>
-                        </MDBCol>
-                        <MDBCol md="4" lg="3" className="mb-3">
-                          <label className="grey-text">actualWork</label>
-                          <input
-                            name="actualWorkTime"
-                            value={userDate.data.actualWorkTime}
-                            onChange={this.changeHandler}
-                            type="text"
-                            className="form-control"
-                            required
-                          />
-                          <div className="invalid-feedback">
-                            Wrong format, please use 'hh:mm'
-                          </div>
-                        </MDBCol>
-                        <MDBCol md="4" lg="3" className="mb-3">
-                          <label className="grey-text">status</label>
-                          <select
-                            className="browser-default custom-select"
-                            name="status"
-                            value={userDate.data.status}
-                            onChange={this.changeHandler}
-                          >
-                            <option value="complete">complete</option>
-                            <option value="incomplete">incomplete</option>
-                            <option value="overtime">overtime</option>
-                          </select>
-                          <div className="invalid-feedback">Require!</div>
+                          <div className="invalid-feedback">Require</div>
                         </MDBCol>
                       </MDBRow>
                       <MDBRow>
@@ -252,12 +172,7 @@ class UserListModal extends React.Component {
                 </MDBRow>
               </MDBContainer>
             </MDBModalBody>
-            <MDBModalFooter>
-              {/* <MDBBtn color="secondary" onClick={this.props.toggle}>
-                Close
-              </MDBBtn>
-              <MDBBtn color="primary">Save changes</MDBBtn> */}
-            </MDBModalFooter>
+            <MDBModalFooter></MDBModalFooter>
           </MDBModal>
         </MDBContainer>
       </div>

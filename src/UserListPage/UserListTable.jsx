@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import UserListModal from './UserListModal';
 
 import {
   MDBTable,
@@ -68,17 +69,16 @@ class UserListTable extends React.Component {
   };
 
   render() {
-    const { validToken, userListData } = this.state;
+    const { validToken, userListData, userData } = this.state;
 
     return (
       <div>
-        {/* <UserListModal
+        <UserListModal
           modal={this.state.modal}
-          userDate={userDate}
-          dateData={dateData}
+          userData={userData}
           toggle={this.toggleModal}
           onUpdate={this.updateHandler}
-        /> */}
+        />
 
         <MDBTable hover small responsive>
           <MDBTableHead>

@@ -5,12 +5,9 @@ import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import HelperMethods from '../Helpers/HelperMethods';
 import {
   MDBRow,
-  MDBBtn,
   MDBCard,
   MDBCardBody,
-  MDBCardImage,
   MDBCardTitle,
-  MDBCardText,
   MDBCol
 } from 'mdbreact';
 
