@@ -3,6 +3,16 @@ import React, { Component } from 'react';
 import './LoginPage.css';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import HelperMethods from '../Helpers/HelperMethods';
+import {
+  MDBRow,
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCol
+} from 'mdbreact';
 
 class LoginPage extends Component {
   Auth = new AuthHelperMethods();
@@ -13,7 +23,6 @@ class LoginPage extends Component {
     this.state = {
       username: '',
       password: '',
-      currentUser: null,
       errors: ''
     };
   }
@@ -80,56 +89,56 @@ class LoginPage extends Component {
       <section className="section -fluid login-container">
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div className="card card-signin my-5 bg-light">
-              <div className="card-body">
-                <h5 className="card-title text-center">Login</h5>
+            <MDBCard>
+              <MDBCardBody>
+                <MDBCardTitle className="text-center mt-2">Login</MDBCardTitle>
                 <form className="form-signin">
-                  <div className="form-label-group">
-                    <label>Username</label>
-                    <input
-                      className="form-control"
-                      placeholder="Username"
-                      required
-                      autoFocus
-                      name="username"
-                      onChange={this.handleChange}
-                    />
-                  </div>
-
-                  <div className="form-label-group">
-                    <label>Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="Password"
-                      required
-                      name="password"
-                      onChange={this.handleChange}
-                    />
-                  </div>
-                  {this.state.errors.length > 0 && (
-                    <span className="text-danger">{this.state.errors}</span>
-                  )}
-                  {this.state.errors.length === 0 && (
-                    <div className="text-light">invisible</div>
-                  )}
-                  <div className="text-light">invisible</div>
-                  <button
-                    className="mt-60 pt-50 btn btn-lg btn-primary btn-block text-uppercase"
-                    onClick={this.handleSubmit}
-                  >
-                    Sign in
-                  </button>
-                  <hr className="my-4" />
-                  <button
-                    className="btn btn-lg btn-block text-uppercase"
-                    onClick={this.handleNewAccount}
-                  >
-                    <i className="fab mr-2" /> Create new account
-                  </button>
+                  <MDBRow className="mb-2">
+                    <MDBCol md="12" lg="12">
+                      <label>Username</label>
+                      <input
+                        className="form-control"
+                        placeholder="Username"
+                        required
+                        autoFocus
+                        name="username"
+                        onChange={this.handleChange}
+                      />
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow className="mb-0">
+                    <MDBCol md="12" lg="12">
+                      <label>Password</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        placeholder="Password"
+                        required
+                        name="password"
+                        onChange={this.handleChange}
+                      />
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow className="mb-2">
+                    <MDBCol md="12" lg="12">
+                      {this.state.errors.length > 0 && (
+                        <span className="text-danger">{this.state.errors}</span>
+                      )}
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow className="mb-1">
+                    <MDBCol md="12" lg="12">
+                      <button
+                        className="mt-60 pt-50 btn btn-lg btn-primary btn-block text-uppercase"
+                        onClick={this.handleSubmit}
+                      >
+                        Sign in
+                      </button>
+                    </MDBCol>
+                  </MDBRow>
                 </form>
-              </div>
-            </div>
+              </MDBCardBody>
+            </MDBCard>
           </div>
         </div>
       </section>
