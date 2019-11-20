@@ -23,12 +23,12 @@ class LoginPage extends Component {
     this.state = {
       username: '',
       password: '',
-      errors: ''
+      validState: '',
+      errorMessage: ''
     };
   }
 
-  async componentDidMount() {
-  }
+  async componentDidMount() {}
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -60,14 +60,13 @@ class LoginPage extends Component {
   };
 
   handleStatusCode = err => {
-    let errors = this.state.errors;
-    console.log(err);
+    let errorMessage = this.state.errorMessage;
     if (!err.response) {
-      errors = 'Server fail, please check server status';
+      errorMessage = 'Server fail, please check server status';
     } else {
       switch (err.response.status) {
         case 401:
-          errors = 'Username or password are incorrect';
+          errorMessage = 'Username or password are incorrect';
           break;
         default:
           this.Helper.errorHandler(err);
@@ -76,7 +75,8 @@ class LoginPage extends Component {
     }
 
     this.setState({
-      errors
+      errorMessage,
+      validState: 'is-invalid'
     });
   };
 
@@ -86,6 +86,8 @@ class LoginPage extends Component {
   };
 
   render() {
+    const { errorMessage, validState } = this.state;
+    let formValidState = `form-control ${validState}`;
     return (
       <section className="section -fluid login-container">
         <div className="row">
@@ -98,7 +100,7 @@ class LoginPage extends Component {
                     <MDBCol md="12" lg="12">
                       <label>Username</label>
                       <input
-                        className="form-control"
+                        className={formValidState}
                         placeholder="Username"
                         required
                         autoFocus
@@ -107,24 +109,18 @@ class LoginPage extends Component {
                       />
                     </MDBCol>
                   </MDBRow>
-                  <MDBRow className="mb-0">
+                  <MDBRow className="mb-3">
                     <MDBCol md="12" lg="12">
                       <label>Password</label>
                       <input
                         type="password"
-                        className="form-control"
+                        className={formValidState}
                         placeholder="Password"
                         required
                         name="password"
                         onChange={this.handleChange}
                       />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow className="mb-2">
-                    <MDBCol md="12" lg="12">
-                      {this.state.errors.length > 0 && (
-                        <span className="text-danger">{this.state.errors}</span>
-                      )}
+                      <div className="invalid-feedback">{errorMessage}</div>
                     </MDBCol>
                   </MDBRow>
                   <MDBRow className="mb-1">
