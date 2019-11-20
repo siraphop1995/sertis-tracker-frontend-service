@@ -1,6 +1,7 @@
 import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
-// import withAuth from '../components/withAuth';
+import AuthHelperMethods from '../Helpers/AuthHelperMethods';
+
 import UserTable from './UserTable';
 import moment from 'moment-timezone';
 
@@ -10,6 +11,7 @@ import { DatePicker } from '@material-ui/pickers';
 import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBIcon } from 'mdbreact';
 import { MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 class UserPage extends React.Component {
+  Auth = new AuthHelperMethods();
   Helper = new HelperMethods();
   constructor(props) {
     super(props);
@@ -22,14 +24,12 @@ class UserPage extends React.Component {
       alertMessage: '',
       userId: '',
       userData: {},
-      token: '12346',
       validToken: true
     };
   }
 
   async componentDidMount() {
-    console.log(process.env.REACT_APP_USER_SERVER)
-
+    this.checkAdmin();
     let { userId, dateQuery } = this.props.match.params;
     if (!userId) {
       userId = this.loadUserSearch();
@@ -51,6 +51,11 @@ class UserPage extends React.Component {
       }
     }
   }
+
+  checkAdmin = () => {
+    const isTokenValid = this.Auth.loggedIn();
+    this.setState({ validToken: isTokenValid });
+  };
 
   praseDate = date => {
     return date.split('-').map(d => parseInt(d, 10));

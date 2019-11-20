@@ -70,7 +70,7 @@ class DateModal extends React.Component {
 
   changeHandler = event => {
     const { name, value } = event.target;
-    let isValid = this._validTime(value);
+    let isValid = name === 'status' ? true : this._validTime(value);
 
     if (isValid) {
       event.target.setCustomValidity('');

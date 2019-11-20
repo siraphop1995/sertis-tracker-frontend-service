@@ -69,7 +69,7 @@ class UserModal extends React.Component {
 
   changeHandler = event => {
     const { name, value } = event.target;
-    let isValid = this._validTime(value);
+    let isValid = name === 'status' ? true : this._validTime(value);
 
     if (isValid) {
       event.target.setCustomValidity('');
@@ -186,7 +186,7 @@ class UserModal extends React.Component {
                             required
                           />
                           <div className="invalid-feedback">
-                            Wrong format, please use 'hh:mm'
+                            Wrong format, please use [hh:mm]
                           </div>
                         </MDBCol>
                         <MDBCol md="4" lg="3" className="mb-3">
