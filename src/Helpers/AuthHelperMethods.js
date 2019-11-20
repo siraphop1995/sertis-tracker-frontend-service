@@ -1,11 +1,12 @@
 import decode from 'jwt-decode';
 import axios from 'axios';
+const USER_SERVER = process.env.REACT_APP_USER_SERVER;
 
 export default class AuthHelperMethods {
   login = async loginData => {
     try {
       return await axios
-        .post(`http://localhost:7001/login`, loginData)
+        .post(`${USER_SERVER}/login`, loginData)
         .then(res => {
           this.setToken(res.data.token);
           return Promise.resolve(res);

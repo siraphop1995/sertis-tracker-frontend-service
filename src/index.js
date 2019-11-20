@@ -9,12 +9,6 @@ import { App } from './AppPage';
 import * as serviceWorker from './serviceWorker';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
-import { directive } from '@babel/types';
-
-const local_url = 'http://localhost:3000'
-const vm_url = 'http://35.198.233.48:3000'
-
-axios.defaults.baseURL = vm_url;
 
 axios.interceptors.request.use(
   request => {

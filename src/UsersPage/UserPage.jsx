@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 // import withAuth from '../components/withAuth';
 import UserTable from './UserTable';
@@ -9,7 +9,6 @@ import { DatePicker } from '@material-ui/pickers';
 
 import { MDBContainer, MDBRow, MDBCol, MDBAlert, MDBIcon } from 'mdbreact';
 import { MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
-import { thisExpression } from '@babel/types';
 class UserPage extends React.Component {
   Helper = new HelperMethods();
   constructor(props) {
@@ -29,6 +28,8 @@ class UserPage extends React.Component {
   }
 
   async componentDidMount() {
+    console.log(process.env.REACT_APP_USER_SERVER)
+
     let { userId, dateQuery } = this.props.match.params;
     if (!userId) {
       userId = this.loadUserSearch();

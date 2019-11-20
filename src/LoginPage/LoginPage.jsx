@@ -27,7 +27,8 @@ class LoginPage extends Component {
     };
   }
 
-  async componentDidMount() {}
+  async componentDidMount() {
+  }
 
   handleChange = e => {
     const { name, value } = e.target;

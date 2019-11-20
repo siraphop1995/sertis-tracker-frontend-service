@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const USER_SERVER = 'http://localhost:7001';
-const DATE_SERVER = 'http://localhost:7002';
-// const LINE_SERVER = 'http://localhost:7003'
+const USER_SERVER = process.env.REACT_APP_USER_SERVER;
+const DATE_SERVER = process.env.REACT_APP_DATE_SERVER;
+// const LINE_SERVER = process.env.REACT_APP_LINE_SERVER;
 
 export async function getUserList() {
   return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.user;

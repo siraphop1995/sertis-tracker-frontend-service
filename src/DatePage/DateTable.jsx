@@ -10,7 +10,6 @@ import {
   MDBIcon,
   MDBBtn,
   MDBBadge,
-  MDBPopover
 } from 'mdbreact';
 
 class DateTable extends React.Component {

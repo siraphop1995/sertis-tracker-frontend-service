@@ -1,11 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 import withAuth from '../components/withAuth';
 import UserListTable from './UserListTable';
-import moment from 'moment-timezone';
 
 import { getUserList } from '../Helpers/dbHandler';
-import { DatePicker } from '@material-ui/pickers';
 
 import { MDBContainer, MDBRow, MDBCol, MDBAlert } from 'mdbreact';
 import { MDBCard, MDBCardBody } from 'mdbreact';

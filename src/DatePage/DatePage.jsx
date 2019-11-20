@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 import withAuth from '../components/withAuth';
 import DateTable from './DateTable';
@@ -6,20 +6,15 @@ import moment from 'moment-timezone';
 
 import { findDate } from '../Helpers/dbHandler';
 import { DatePicker } from '@material-ui/pickers';
-
 import {
   MDBContainer,
   MDBRow,
   MDBCol,
-  MDBTable,
-  MDBTableBody,
-  MDBTableHead,
   MDBAlert,
-  MDBIcon,
-  MDBInput
+  MDBCard,
+  MDBCardBody
 } from 'mdbreact';
-import { MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
-import { thisExpression } from '@babel/types';
+
 class DatePage extends React.Component {
   Helper = new HelperMethods();
   constructor(props) {
@@ -54,15 +49,9 @@ class DatePage extends React.Component {
       return moment(selectedDate);
     }
     let date = moment().subtract(1, 'day');
-    if (date.format('ddd') == 'Sat') return date.subtract(1, 'day');
-    if (date.format('ddd') == 'Sun') return date.subtract(2, 'day');
+    if (date.format('ddd') === 'Sat') return date.subtract(1, 'day');
+    if (date.format('ddd') === 'Sun') return date.subtract(2, 'day');
     return date;
-  };
-
-  loadUserData = () => {
-    console.log(this.state);
-    // const { defaultUserData, filteredUserData } = this.state;
-    return [];
   };
 
   axiosUserData = async selectedDate => {

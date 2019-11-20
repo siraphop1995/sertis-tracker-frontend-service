@@ -70,21 +70,7 @@ class DateModal extends React.Component {
 
   changeHandler = event => {
     const { name, value } = event.target;
-    let isValid = true;
-    switch (name) {
-      case 'inTime':
-        isValid = this._validTime(value);
-        break;
-      case 'outTime':
-        isValid = this._validTime(value);
-        break;
-      case 'expectedWorkTime':
-        isValid = this._validTime(value);
-        break;
-      case 'actualWorkTime':
-        isValid = this._validTime(value);
-        break;
-    }
+    let isValid = this._validTime(value);
 
     if (isValid) {
       event.target.setCustomValidity('');
@@ -115,7 +101,7 @@ class DateModal extends React.Component {
   };
 
   render() {
-    const { userDate, dateData } = this.state;
+    const { userDate } = this.state;
 
     return (
       <div>

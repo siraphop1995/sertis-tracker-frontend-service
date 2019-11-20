@@ -1,16 +1,12 @@
 import React from 'react';
-import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
-import UserListModal from './UserListModal';
 
 import {
   MDBTable,
   MDBTableBody,
   MDBTableHead,
   MDBIcon,
-  MDBBtn,
-  MDBBadge,
-  MDBPopover
+  MDBBtn
 } from 'mdbreact';
 
 class UserListTable extends React.Component {
@@ -72,7 +68,7 @@ class UserListTable extends React.Component {
   };
 
   render() {
-    const { validToken, userListData, userData } = this.state;
+    const { validToken, userListData } = this.state;
 
     return (
       <div>
