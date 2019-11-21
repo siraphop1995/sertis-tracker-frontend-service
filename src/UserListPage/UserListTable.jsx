@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import UserListModal from './UserListModal';
+import { deleteUser } from '../Helpers/dbHandler';
 
 import {
   MDBTable,
@@ -8,6 +9,12 @@ import {
   MDBTableHead,
   MDBIcon,
   MDBBtn
+} from 'mdbreact';
+import {
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter
 } from 'mdbreact';
 
 class UserListTable extends React.Component {
@@ -18,7 +25,8 @@ class UserListTable extends React.Component {
       userListData: [],
       userData: {},
       validToken: false,
-      modal: false
+      modal: false,
+      deleteModal: false
     };
   }
 
@@ -35,7 +43,6 @@ class UserListTable extends React.Component {
       });
     }
     if (this.props.userListData !== prevProps.userListData) {
-      console.log(this.props.userListData);
       this.setState({
         userListData: this.props.userListData
       });
@@ -68,11 +75,68 @@ class UserListTable extends React.Component {
     });
   };
 
-  render() {
-    const { validToken, userListData, userData } = this.state;
+  toggleConfirmDelete = userData => {
+    if (!this.state.deleteModal === true) {
+      this.setState({
+        userData: userData
+      });
+    }
+    this.setState({
+      deleteModal: !this.state.deleteModal
+    });
+  };
 
+  handleDelete = async () => {
+    const { userData } = this.state;
+    const id = userData._id;
+    try {
+      await deleteUser(id);
+      const { userListData } = this.state;
+      this.setState({
+        deleteModal: false,
+        userListData: userListData.filter(u => u.uid !== userData.uid)
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  render() {
+    const { userListData, userData } = this.state;
+    console.log(userData);
     return (
       <div>
+        <MDBModal
+          isOpen={this.state.deleteModal}
+          toggle={this.toggleConfirmDelete}
+          centered
+        >
+          <MDBModalHeader toggle={this.toggleConfirmDelete}>
+            <p>Confirm delete</p>
+            <p>
+              {userData.uid}: {userData.firstName} {userData.lastName}
+            </p>
+          </MDBModalHeader>
+          <MDBModalBody>
+            <div className="mx-5">
+              <MDBBtn
+                className="mx-3"
+                color="primary"
+                onClick={this.handleDelete}
+              >
+                Yes
+              </MDBBtn>
+              <MDBBtn
+                className="mx-3"
+                color="secondary"
+                onClick={this.toggleConfirmDelete}
+              >
+                No
+              </MDBBtn>
+            </div>
+          </MDBModalBody>
+        </MDBModal>
+
         <UserListModal
           modal={this.state.modal}
           userData={userData}
@@ -104,26 +168,32 @@ class UserListTable extends React.Component {
                   <td>{user.initCode}</td>
                   <td>
                     <span>
-                      {validToken ? (
-                        <div className="mx-0">
-                          <MDBBtn
-                            color="primary"
-                            size="sm"
-                            className="my-0 py-1"
-                            onClick={() => this.toUserPage(user)}
-                          >
-                            <MDBIcon icon="user" />
-                          </MDBBtn>
-                          <MDBBtn
-                            color="warning"
-                            size="sm"
-                            className="my-0 py-1"
-                            onClick={() => this.toggleModal(user)}
-                          >
-                            <MDBIcon icon="edit" />
-                          </MDBBtn>
-                        </div>
-                      ) : null}
+                      <div className="mx-auto">
+                        <MDBBtn
+                          color="primary"
+                          size="sm"
+                          className="my-0 py-1"
+                          onClick={() => this.toUserPage(user)}
+                        >
+                          <MDBIcon icon="user" />
+                        </MDBBtn>
+                        <MDBBtn
+                          color="warning"
+                          size="sm"
+                          className="my-0 py-1"
+                          onClick={() => this.toggleModal(user)}
+                        >
+                          <MDBIcon icon="edit" />
+                        </MDBBtn>
+                        <MDBBtn
+                          color="danger"
+                          size="sm"
+                          className="my-0 py-1"
+                          onClick={() => this.toggleConfirmDelete(user)}
+                        >
+                          <MDBIcon icon="edit" />
+                        </MDBBtn>
+                      </div>
                     </span>
                   </td>
                 </tr>

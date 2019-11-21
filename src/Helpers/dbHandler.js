@@ -28,6 +28,10 @@ export async function updateUser(id, userData) {
   ).data;
 }
 
+export async function deleteUser(id) {
+  return (await axios.delete(`${USER_SERVER}/deleteUser/${id}`)).data;
+}
+
 export async function updateDateUser(did, uid, newData) {
   return (
     await axios.post(`${DATE_SERVER}/updateDateUser`, {
