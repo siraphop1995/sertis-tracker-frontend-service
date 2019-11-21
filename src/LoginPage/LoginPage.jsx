@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { Component } from 'react';
-import './LoginPage.css';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
 import HelperMethods from '../Helpers/HelperMethods';
 import {
@@ -86,7 +85,7 @@ class LoginPage extends Component {
     const { errorMessage, validState } = this.state;
     let formValidState = `form-control ${validState}`;
     return (
-      <section className="section -fluid login-container">
+      <section className="section -fluid login-container "style={{ marginTop: '8rem' }}>
         <div className="row">
           <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <MDBCard>
@@ -106,7 +105,7 @@ class LoginPage extends Component {
                       />
                     </MDBCol>
                   </MDBRow>
-                  <MDBRow className="mb-3">
+                  <MDBRow className="mb-4">
                     <MDBCol md="12" lg="12">
                       <label>Password</label>
                       <input
@@ -120,7 +119,7 @@ class LoginPage extends Component {
                       <div className="invalid-feedback">{errorMessage}</div>
                     </MDBCol>
                   </MDBRow>
-                  <MDBRow className="mb-1">
+                  <MDBRow className="mb-5">
                     <MDBCol md="12" lg="12">
                       <button
                         className="mt-60 pt-50 btn btn-lg btn-primary btn-block text-uppercase"

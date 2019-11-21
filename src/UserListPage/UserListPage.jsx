@@ -50,7 +50,7 @@ class UserListPage extends React.Component {
   };
 
   handleAddUser = () => {
-    console.log('adduser');
+    this.props.history.push(`/adduser`);
   };
 
   render() {

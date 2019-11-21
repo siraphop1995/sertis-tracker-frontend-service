@@ -14,6 +14,7 @@ import { CreateAccPage } from '../CreateAccPage';
 import { AuthDatePage } from '../DatePage';
 import { UserPage } from '../UsersPage';
 import { AuthUserListPage } from '../UserListPage';
+import { AuthAddUserPage } from '../AddUserPage';
 import { NotFoundPage } from '../NotFoundPage';
 
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
@@ -33,11 +34,9 @@ class App extends React.Component {
     const DefaultContainer = () => (
       <div>
         <Switch>
-          {/* <NavBar /> */}
-
           <Route path="/date" component={AuthDatePage} />
           <Route path="/userlist" component={AuthUserListPage} />
-
+          <Route path="/adduser" component={AuthAddUserPage} />
           <Route
             path="/logout"
             render={() => {

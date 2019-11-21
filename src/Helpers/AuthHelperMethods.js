@@ -5,12 +5,10 @@ const USER_SERVER = process.env.REACT_APP_USER_SERVER;
 export default class AuthHelperMethods {
   login = async loginData => {
     try {
-      return await axios
-        .post(`${USER_SERVER}/login`, loginData)
-        .then(res => {
-          this.setToken(res.data.token);
-          return Promise.resolve(res);
-        });
+      return await axios.post(`${USER_SERVER}/login`, loginData).then(res => {
+        this.setToken(res.data.token);
+        return Promise.resolve(res);
+      });
     } catch (error) {
       // var errors = new Error(error.response.data.message);
       throw error;
