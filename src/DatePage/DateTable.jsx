@@ -9,7 +9,7 @@ import {
   MDBTableHead,
   MDBIcon,
   MDBBtn,
-  MDBBadge,
+  MDBBadge
 } from 'mdbreact';
 
 class DateTable extends React.Component {
@@ -103,22 +103,18 @@ class DateTable extends React.Component {
           <MDBTableBody>
             {userData.map(data => {
               if (data.data) {
-                let color = 'table-light';
-                let isLine = '';
-                if (data.data.status) {
-                  isLine = data.data.lineMessage ? (
-                    <MDBBadge color="success">
-                      <MDBIcon far icon="comment-dots" size="2x" />
-                    </MDBBadge>
-                  ) : null;
-                  color = data.data.lineMessage ? 'table-success' : color;
-                }
-                color =
+                const isLine = data.data.lineMessage ? (
+                  <MDBBadge color="success">
+                    <MDBIcon far icon="comment-dots" size="2x" />
+                  </MDBBadge>
+                ) : null;
+
+                const color =
                   data.data.status === 'incomplete'
                     ? 'table-danger'
                     : data.data.status === 'overtime'
                     ? 'table-warning'
-                    : 'table-light';
+                    : '';
 
                 return (
                   <tr key={data.uid} className={color}>

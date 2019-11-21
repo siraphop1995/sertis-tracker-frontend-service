@@ -97,6 +97,7 @@ class AddUserPage extends React.Component {
           lastName: account.lastName.value
         };
         await createUser(userData);
+        this.props.history.push(`/userlist`);
       } catch (err) {
         this.handleStatusCode(err);
       }

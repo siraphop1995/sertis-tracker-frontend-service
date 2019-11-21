@@ -94,8 +94,9 @@ class UserListTable extends React.Component {
 
           <MDBTableBody>
             {userListData.map(user => {
+              const color = !user.lid ? 'table-danger' : '';
               return (
-                <tr key={user.uid}>
+                <tr key={user.uid} className={color}>
                   <th>{user.uid}</th>
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
