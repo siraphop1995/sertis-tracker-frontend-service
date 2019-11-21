@@ -8,6 +8,14 @@ export async function getUserList() {
   return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.user;
 }
 
+export async function createUser(userData) {
+  return (
+    await axios.post(`${USER_SERVER}/createUser`, {
+      ...userData
+    })
+  ).data;
+}
+
 export async function updateUser(id, userData) {
   let newData = {
     firstName: userData.firstName,

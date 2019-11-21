@@ -1,41 +1,82 @@
 import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 import withAuth from '../components/withAuth';
-import { MDBRow, MDBCard, MDBCardBody, MDBCardTitle, MDBCol } from 'mdbreact';
+import { createUser } from '../Helpers/dbHandler';
+
+import {
+  MDBRow,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCol,
+  MDBBtn
+} from 'mdbreact';
 
 class AddUserPage extends React.Component {
   Helper = new HelperMethods();
+
   constructor(props) {
     super(props);
+    this.form = React.createRef();
+
     this.state = {
       account: {
         uid: {
           value: '',
-          validState: 'form-control '
+          validState: 'form-control ',
+          error: ''
         },
         firstName: {
           value: '',
-          validState: 'form-control '
+          validState: 'form-control ',
+          error: ''
         },
         lastName: {
           value: '',
-          validState: 'form-control '
+          validState: 'form-control ',
+          error: ''
         }
-      },
-      errorMessage: ''
+      }
     };
   }
+  validate() {
+    return this.form.current.reportValidity();
+  }
 
-  handleChange = e => {
+  changeHandler = e => {
     const { name, value } = e.target;
 
+    let error = '';
+    let validState = 'form-control ';
+    switch (name) {
+      case 'uid':
+        if (value.length < 3) {
+          error = 'Employee ID must be at least 3 character';
+          validState += 'is-invalid';
+        }
+        break;
+      case 'firstName':
+        if (value.length < 1) {
+          error = 'Require';
+          validState += 'is-invalid';
+        }
+        break;
+      case 'lastName':
+        if (value.length < 1) {
+          error = 'Require';
+          validState += 'is-invalid';
+        }
+        break;
+    }
     this.setState(
       {
         account: {
           ...this.state.account,
           [name]: {
             ...this.state.account[name],
-            value
+            value,
+            validState,
+            error
           }
         }
       },
@@ -45,26 +86,38 @@ class AddUserPage extends React.Component {
     );
   };
 
-  handleSubmit = async e => {
+  submitHandler = async e => {
     e.preventDefault();
-    console.log(this.state.account)
+    if (this.validate()) {
+      const { account } = this.state;
+      try {
+        let userData = {
+          uid: account.uid.value,
+          firstName: account.firstName.value,
+          lastName: account.lastName.value
+        };
+        await createUser(userData);
+      } catch (err) {
+        this.handleStatusCode(err);
+      }
+    }
+  };
 
-    // const { username, password } = this.state;
-    // let loginData = {
-    //   username: username,
-    //   password: password
-    // };
+  handleStatusCode = err => {
+    let { account } = this.state;
+    switch (err.response.status) {
+      case 400:
+        account.uid.error = 'Username already exist';
+        account.uid.validState = 'form-control is-invalid';
+        break;
+      default:
+        this.Helper.errorHandler(err);
+        break;
+    }
 
-    // this.Auth.login(loginData)
-    //   .then(res => {
-    //     if (res === false) {
-    //       return alert("Sorry those credentials don't exist!");
-    //     }
-    //     this.props.history.push('/date');
-    //   })
-    //   .catch(error => {
-    //     this.handleStatusCode(error);
-    //   });
+    this.setState({
+      account
+    });
   };
 
   render() {
@@ -74,54 +127,58 @@ class AddUserPage extends React.Component {
         <MDBCard>
           <MDBCardBody>
             <MDBCardTitle className="text-center mt-2">Add user</MDBCardTitle>
-            <form className="form-signin">
-              <MDBRow className="mb-2">
-                <MDBCol md="12" lg="12">
-                  <label>User Id</label>
+            <form ref={this.form} onSubmit={this.submitHandler} noValidate>
+              <MDBRow className="mb-3">
+                <MDBCol className="mx-5">
+                  <label className="grey-text">Employee ID</label>
                   <input
-                    className={account.uid.validState}
-                    placeholder="User Id"
-                    required
-                    autoFocus
                     name="uid"
-                    onChange={this.handleChange}
+                    value={account.uid.value}
+                    onChange={this.changeHandler}
+                    type="text"
+                    className={account.uid.validState}
+                    required
                   />
+                  <div className="invalid-feedback">{account.uid.error}</div>
                 </MDBCol>
               </MDBRow>
-              <MDBRow className="mb-2">
-                <MDBCol md="12" lg="12">
-                  <label>First name</label>
+              <MDBRow className="mb-3">
+                <MDBCol className="mx-5">
+                  <label className="grey-text">First name</label>
                   <input
-                    className={account.firstName.validState}
-                    placeholder="First name"
-                    required
                     name="firstName"
-                    onChange={this.handleChange}
-                  />
-                  {/* <div className="invalid-feedback">{errorMessage}</div> */}
-                </MDBCol>
-              </MDBRow>
-              <MDBRow className="mb-4">
-                <MDBCol md="12" lg="12">
-                  <label>Last name</label>
-                  <input
-                    className={account.lastName.validState}
-                    placeholder="Last name"
+                    value={account.firstName.value}
+                    onChange={this.changeHandler}
+                    type="text"
+                    className={account.firstName.validState}
                     required
-                    name="lastName"
-                    onChange={this.handleChange}
                   />
-                  {/* <div className="invalid-feedback">{errorMessage}</div> */}
+                  <div className="invalid-feedback">
+                    {account.firstName.error}
+                  </div>
                 </MDBCol>
               </MDBRow>
-              <MDBRow className="mb-5">
-                <MDBCol md="12" lg="12">
-                  <button
-                    className="mt-60 pt-50 btn btn-lg btn-primary btn-block text-uppercase"
-                    onClick={this.handleSubmit}
-                  >
-                    Add
-                  </button>
+              <MDBRow className="mb-3">
+                <MDBCol className="mx-5">
+                  <label className="grey-text">Last name</label>
+                  <input
+                    name="lastName"
+                    value={account.lastName.value}
+                    onChange={this.changeHandler}
+                    type="text"
+                    className={account.lastName.validState}
+                    required
+                  />
+                  <div className="invalid-feedback">
+                    {account.lastName.error}
+                  </div>
+                </MDBCol>
+              </MDBRow>
+              <MDBRow>
+                <MDBCol md="8" className="mx-5">
+                  <MDBBtn color="primary" type="submit">
+                    Submit Form
+                  </MDBBtn>
                 </MDBCol>
               </MDBRow>
             </form>
