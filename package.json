@@ -19,7 +19,7 @@
     "react-scripts": "3.0.1"
   },
   "scripts": {
-    "start": "PORT=8080 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "server:start": "pm2 start pm2config.json",
     "server:stop": "pm2 delete frontend",
