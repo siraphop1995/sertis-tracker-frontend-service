@@ -27,8 +27,6 @@ class DatePage extends React.Component {
       dataLoaded: true,
       alertMessage: '',
       userData: [],
-      defaultUserData: [],
-      filteredUserData: [],
       token: '12346',
       validToken: true
     };
@@ -81,7 +79,7 @@ class DatePage extends React.Component {
       );
       this.setState({ dataLoaded: true });
     } catch (err) {
-      this.setState({ dataLoaded: false });
+      this.setState({ dataLoaded: false, userData: [] });
     }
   };
 

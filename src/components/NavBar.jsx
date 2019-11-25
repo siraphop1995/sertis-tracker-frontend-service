@@ -42,9 +42,9 @@ class NavBar extends Component {
             <MDBNavItem>
               <MDBNavLink to="/users">User</MDBNavLink>
             </MDBNavItem>
-            <MDBNavItem>
+            {/* <MDBNavItem>
               <MDBNavLink to="/adminlist">AdminList</MDBNavLink>
-            </MDBNavItem>
+            </MDBNavItem> */}
             <MDBNavItem>
               <MDBNavLink to="/userlist">UserList</MDBNavLink>
             </MDBNavItem>

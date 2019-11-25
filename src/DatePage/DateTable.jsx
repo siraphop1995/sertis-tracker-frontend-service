@@ -118,7 +118,7 @@ class DateTable extends React.Component {
 
                 return (
                   <tr key={data.uid} className={color}>
-                    <th>{data.uid}</th>
+                    <th>{data.uid}: {data.firstName} {data.lastName}</th>
                     <td>{data.data.inTime}</td>
                     <td>{data.data.outTime}</td>
                     <td>{data.data.expectedWorkTime}</td>
