@@ -1,11 +1,6 @@
 import axios from 'axios';
-const { NODE_ENV } = process.env;
-console.log(NODE_ENV);
 const USER_SERVER = process.env.REACT_APP_USER_SERVER;
 const DATE_SERVER = process.env.REACT_APP_DATE_SERVER;
-
-console.log(USER_SERVER);
-console.log(DATE_SERVER);
 
 export async function getUserList() {
   return (await axios.get(`${USER_SERVER}/getAllUsers`)).data.user;

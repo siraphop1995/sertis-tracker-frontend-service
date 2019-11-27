@@ -1,6 +1,7 @@
 import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
+import LoaderModal from '../components/Loader';
 
 import UserTable from './UserTable';
 import moment from 'moment-timezone';
@@ -24,7 +25,9 @@ class UserPage extends React.Component {
       alertMessage: '',
       userId: '',
       userData: {},
-      validToken: true
+      validToken: true,
+      modal: true,
+      loading: false
     };
   }
 
@@ -35,22 +38,22 @@ class UserPage extends React.Component {
       userId = this.loadUserSearch();
     }
     if (userId) {
-      try {
-        if (dateQuery) {
-          const [dd, mm, yy] = this.praseDate(dateQuery);
-          this.setState({ selectedMonth: moment([yy, mm - 1, dd]) });
-          await this.axiosUserData(userId, moment([yy, mm - 1, dd]));
-        } else {
-          const { selectedMonth } = this.state;
-          await this.axiosUserData(userId, selectedMonth);
-        }
-
-        this.setState({ dataLoaded: true });
-      } catch (err) {
-        this.setState({ dataLoaded: false });
+      if (dateQuery) {
+        const [dd, mm, yy] = this.praseDate(dateQuery);
+        this.setState({ selectedMonth: moment([yy, mm - 1, dd]) });
+        await this.axiosUserData(userId, moment([yy, mm - 1, dd]));
+      } else {
+        const { selectedMonth } = this.state;
+        await this.axiosUserData(userId, selectedMonth);
       }
     }
   }
+
+  setLoading = load => {
+    this.setState({
+      loading: load
+    });
+  };
 
   checkAdmin = () => {
     const isTokenValid = this.Auth.loggedIn();
@@ -71,11 +74,20 @@ class UserPage extends React.Component {
   };
 
   axiosUserData = async (userId, selectedMonth) => {
-    const userDateData = await findUserDate(userId, selectedMonth);
-
-    const { dateData } = userDateData;
-    userDateData.dateData = undefined;
-    this.setState({ dateData, userData: userDateData });
+    try {
+      this.setState({ loading: true });
+      const userDateData = await findUserDate(userId, selectedMonth);
+      const { dateData } = userDateData;
+      userDateData.dateData = undefined;
+      this.setState({ loading: false });
+      this.setState({
+        dateData,
+        userData: userDateData,
+        dataLoaded: true
+      });
+    } catch (err) {
+      this.setState({ loading: false, dataLoaded: false, dateData: [] });
+    }
   };
 
   handleSearchChange = e => {
@@ -86,31 +98,27 @@ class UserPage extends React.Component {
   };
 
   handleSearch = async () => {
-    try {
-      const { userSearch, selectedMonth } = this.state;
-      await this.axiosUserData(userSearch, selectedMonth);
-      sessionStorage.setItem('userSearch', userSearch);
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false, dateData: [] });
-    }
+    const { userSearch, selectedMonth } = this.state;
+    await this.axiosUserData(userSearch, selectedMonth);
+    sessionStorage.setItem('userSearch', userSearch);
   };
 
   handleMonthChange = async event => {
-    try {
-      this.setState({ selectedMonth: event });
-      sessionStorage.setItem(
-        'selectedMonth',
-        moment(event)
-          .tz('Asia/Bangkok')
-          .format()
-      );
-      const { uid } = this.state.userData;
-      await this.axiosUserData(uid, event);
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false, dateData: [] });
-    }
+    this.setState({ selectedMonth: event });
+    sessionStorage.setItem(
+      'selectedMonth',
+      moment(event)
+        .tz('Asia/Bangkok')
+        .format()
+    );
+    const { uid } = this.state.userData;
+    await this.axiosUserData(uid, event);
+  };
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal
+    });
   };
 
   render() {
@@ -119,11 +127,13 @@ class UserPage extends React.Component {
       dateData,
       dataLoaded,
       selectedMonth,
-      validToken
+      validToken,
+      loading
     } = this.state;
 
     return (
       <div>
+        <LoaderModal modal={this.state.modal} toggle={this.toggle} />
         <MDBContainer fluid>
           <MDBCol>
             <MDBCard style={{ marginTop: '20px' }}>
@@ -163,14 +173,22 @@ class UserPage extends React.Component {
               </MDBRow>
 
               <MDBCardBody>
-                {!dataLoaded ? (
-                  <MDBAlert color="danger">User data not found</MDBAlert>
-                ) : null}
-                <UserTable
-                  dateData={dateData}
-                  validToken={validToken}
-                  userData={userData}
-                />
+                {loading ? (
+                  <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <div>
+                    {!dataLoaded ? (
+                      <MDBAlert color="danger">User data not found</MDBAlert>
+                    ) : null}
+                    <UserTable
+                      dateData={dateData}
+                      validToken={validToken}
+                      userData={userData}
+                    />
+                  </div>
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
