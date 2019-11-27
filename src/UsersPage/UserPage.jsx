@@ -49,15 +49,8 @@ class UserPage extends React.Component {
     }
   }
 
-  setLoading = load => {
-    this.setState({
-      loading: load
-    });
-  };
-
   checkAdmin = () => {
-    const isTokenValid = this.Auth.loggedIn();
-    this.setState({ validToken: isTokenValid });
+    this.setState({ validToken: this.Auth.loggedIn() });
   };
 
   praseDate = date => {

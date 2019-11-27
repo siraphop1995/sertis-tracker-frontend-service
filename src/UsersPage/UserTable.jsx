@@ -9,6 +9,12 @@ import {
   MDBBtn,
   MDBBadge
 } from 'mdbreact';
+import {
+  MDBPopover,
+  MDBPopoverBody,
+  MDBPopoverHeader,
+  MDBContainer
+} from 'mdbreact';
 
 class UserTable extends React.Component {
   constructor(props) {
@@ -95,9 +101,15 @@ class UserTable extends React.Component {
           <MDBTableBody>
             {dateData.map(data => {
               const isLine = data.data.lineMessage ? (
-                <MDBBadge color="success">
-                  <MDBIcon far icon="comment-dots" size="2x" />
-                </MDBBadge>
+                <MDBPopover placement="top" popover clickable id="popper1">
+                  {/* <MDBBtn>popover on top</MDBBtn> */}
+                  <MDBBadge color="success">
+                    <MDBIcon far icon="comment-dots" size="2x" />
+                  </MDBBadge>
+                  <div>
+                    <MDBPopoverBody>{data.data.lineMessage} </MDBPopoverBody>
+                  </div>
+                </MDBPopover>
               ) : null;
 
               const color =
