@@ -33,14 +33,11 @@ class UserModal extends React.Component {
       });
     }
     if (this.props.userDate !== prevProps.userDate) {
-      console.log(this.props.userDate);
-
       this.setState({
         userDate: this.props.userDate
       });
     }
     if (this.props.userData !== prevProps.userData) {
-      console.log(this.props.userData);
       this.setState({
         userData: this.props.userData
       });
@@ -52,7 +49,6 @@ class UserModal extends React.Component {
       event.preventDefault();
       event.target.className += ' was-validated';
       if (this.validate()) {
-        console.log('Valid!!!!');
         let { userData, userDate } = this.state;
         const { uid } = userData;
         const { did } = userDate;

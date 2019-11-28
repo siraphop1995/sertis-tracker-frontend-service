@@ -23,23 +23,23 @@ class UserListPage extends React.Component {
       userSearch: '',
       dataLoaded: true,
       userListData: [],
-      token: '12346',
-      validToken: true
+      loading: false
     };
   }
 
   async componentDidMount() {
-    try {
-      await this.axiosUserData();
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false });
-    }
+    await this.axiosUserData();
   }
 
   axiosUserData = async () => {
-    let userListData = await getUserList();
-    this.setState({ userListData });
+    try {
+      this.setState({ loading: true });
+      let userListData = await getUserList();
+      this.setState({ loading: false });
+      this.setState({ userListData, dataLoaded: true });
+    } catch (err) {
+      this.setState({ loading: false, dataLoaded: false });
+    }
   };
 
   handleSearchChange = e => {
@@ -54,7 +54,7 @@ class UserListPage extends React.Component {
   };
 
   render() {
-    const { userListData, dataLoaded, validToken, userSearch } = this.state;
+    const { userListData, dataLoaded, userSearch, loading } = this.state;
 
     return (
       <div>
@@ -75,7 +75,11 @@ class UserListPage extends React.Component {
                       type="text"
                       placeholder="Search"
                     />
-                    <MDBBtn color="green" size="sm" onClick={this.handleAddUser}>
+                    <MDBBtn
+                      color="green"
+                      size="sm"
+                      onClick={this.handleAddUser}
+                    >
                       <MDBIcon icon="user-plus" />
                     </MDBBtn>
                   </div>
@@ -83,15 +87,41 @@ class UserListPage extends React.Component {
               </MDBRow>
 
               <MDBCardBody>
-                {!dataLoaded ? (
-                  <MDBAlert color="danger">No user data</MDBAlert>
-                ) : null}
-                <UserListTable
-                  validToken={validToken}
-                  userListData={userListData.filter(u =>
-                    userSearch ? u.uid.includes(userSearch) : u
-                  )}
-                />
+                {loading ? (
+                  <div
+                    className="my-5"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {!dataLoaded ? (
+                      <MDBAlert color="danger">No user data</MDBAlert>
+                    ) : null}
+                    <UserListTable
+                      userListData={userListData.filter(u =>
+                        userSearch
+                          ? u.uid
+                              .toLowerCase()
+                              .includes(userSearch.toLowerCase()) ||
+                            u.firstName
+                              .toLowerCase()
+                              .includes(userSearch.toLowerCase()) ||
+                            u.lastName
+                              .toLowerCase()
+                              .includes(userSearch.toLowerCase())
+                          : u
+                      )}
+                    />
+                  </div>
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

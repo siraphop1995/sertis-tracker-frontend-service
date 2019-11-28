@@ -17,9 +17,9 @@ class UserTable extends React.Component {
 
     this.state = {
       dateData: [],
+      userDate: {},
       validToken: false,
       editModal: false,
-      userDate: {},
       userData: {},
       lineModal: false,
       lineMessage: ''
@@ -52,7 +52,6 @@ class UserTable extends React.Component {
 
   editModalToggle = userDate => {
     if (!this.state.editModal === true) {
-      console.log(userDate);
       this.setState({
         userDate: userDate
       });
@@ -63,7 +62,6 @@ class UserTable extends React.Component {
   };
 
   lineModalToggle = lineMessage => {
-    console.log(lineMessage);
     if (!this.state.lineModal === true) {
       this.setState({
         lineMessage: lineMessage

@@ -21,10 +21,9 @@ class UserPage extends React.Component {
       selectedMonth: this.loadSelectedMonth(),
       userSearch: '',
       dataLoaded: true,
-      alertMessage: '',
       userId: '',
       userData: {},
-      validToken: true,
+      validToken: false,
       loading: false
     };
   }
@@ -128,7 +127,9 @@ class UserPage extends React.Component {
                     <h2>
                       {userData.uid}: {userData.firstName} {userData.lastName}
                     </h2>
-                  ) : null}
+                  ) : (
+                    <h2 className="mt-2">Please search for user </h2>
+                  )}
                 </MDBCol>
                 <MDBCol size="3">
                   <DatePicker
@@ -160,6 +161,7 @@ class UserPage extends React.Component {
               <MDBCardBody>
                 {loading ? (
                   <div
+                  className="my-5"
                     style={{
                       display: 'flex',
                       justifyContent: 'center',

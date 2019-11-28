@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
 import DateModal from './DateModal';
+import LineModal from '../components/LineModal';
 
 import {
   MDBTable,
@@ -19,17 +20,14 @@ class DateTable extends React.Component {
     this.state = {
       dateData: {},
       userData: [],
-      validToken: false,
-      modal: false,
-      userDate: {}
+      editModal: false,
+      userDate: {},
+      lineModal: false,
+      lineMessage: ''
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      validToken: this.props.validToken
-    });
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     if (this.props.dateData !== prevProps.dateData) {
@@ -37,11 +35,7 @@ class DateTable extends React.Component {
         dateData: this.props.dateData
       });
     }
-    if (this.props.validToken !== prevProps.validToken) {
-      this.setState({
-        validToken: this.props.validToken
-      });
-    }
+
     if (this.props.userData !== prevProps.userData) {
       this.setState({
         userData: this.props.userData
@@ -55,15 +49,25 @@ class DateTable extends React.Component {
     this.props.history.push(`/users/${userId}/${date}`);
   };
 
-  toggleModal = userDate => {
-    if (!this.state.modal === true) {
-      console.log(userDate);
+  editModalToggle = userDate => {
+    if (!this.state.editModal === true) {
       this.setState({
         userDate: userDate
       });
     }
     this.setState({
-      modal: !this.state.modal
+      editModal: !this.state.editModal
+    });
+  };
+
+  lineModalToggle = lineMessage => {
+    if (!this.state.lineModal === true) {
+      this.setState({
+        lineMessage: lineMessage
+      });
+    }
+    this.setState({
+      lineModal: !this.state.lineModal
     });
   };
 
@@ -75,15 +79,20 @@ class DateTable extends React.Component {
   };
 
   render() {
-    const { dateData, validToken, userData, userDate } = this.state;
+    const { dateData, userData, userDate, lineMessage } = this.state;
 
     return (
       <div>
+        <LineModal
+          modal={this.state.lineModal}
+          toggle={this.lineModalToggle}
+          lineMessage={lineMessage}
+        />
         <DateModal
-          modal={this.state.modal}
+          modal={this.state.editModal}
           userDate={userDate}
           dateData={dateData}
-          toggle={this.toggleModal}
+          toggle={this.editModalToggle}
           onUpdate={this.updateHandler}
         />
         <MDBTable hover small responsive>
@@ -104,7 +113,11 @@ class DateTable extends React.Component {
             {userData.map(data => {
               if (data.data) {
                 const isLine = data.data.lineMessage ? (
-                  <MDBBadge color="success">
+                  <MDBBadge
+                    tag="a"
+                    color="success"
+                    onClick={() => this.lineModalToggle(data.data.lineMessage)}
+                  >
                     <MDBIcon far icon="comment-dots" size="2x" />
                   </MDBBadge>
                 ) : null;
@@ -118,7 +131,9 @@ class DateTable extends React.Component {
 
                 return (
                   <tr key={data.uid} className={color}>
-                    <th>{data.uid}: {data.firstName} {data.lastName}</th>
+                    <th>
+                      {data.uid}: {data.firstName} {data.lastName}
+                    </th>
                     <td>{data.data.inTime}</td>
                     <td>{data.data.outTime}</td>
                     <td>{data.data.expectedWorkTime}</td>
@@ -127,26 +142,24 @@ class DateTable extends React.Component {
                     <td>{data.data.status}</td>
                     <td>
                       <span>
-                        {validToken ? (
-                          <div className="mx-0">
-                            <MDBBtn
-                              color="primary"
-                              size="sm"
-                              className="my-0 py-1"
-                              onClick={() => this.toUserPage(data)}
-                            >
-                              <MDBIcon icon="user" />
-                            </MDBBtn>
-                            <MDBBtn
-                              color="warning"
-                              size="sm"
-                              className="my-0 py-1"
-                              onClick={() => this.toggleModal(data)}
-                            >
-                              <MDBIcon icon="edit" />
-                            </MDBBtn>
-                          </div>
-                        ) : null}
+                        <div className="mx-0">
+                          <MDBBtn
+                            color="primary"
+                            size="sm"
+                            className="my-0 py-1"
+                            onClick={() => this.toUserPage(data)}
+                          >
+                            <MDBIcon icon="user" />
+                          </MDBBtn>
+                          <MDBBtn
+                            color="warning"
+                            size="sm"
+                            className="my-0 py-1"
+                            onClick={() => this.editModalToggle(data)}
+                          >
+                            <MDBIcon icon="edit" />
+                          </MDBBtn>
+                        </div>
                       </span>
                     </td>
                   </tr>

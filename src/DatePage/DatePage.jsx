@@ -25,20 +25,13 @@ class DatePage extends React.Component {
       selectedDate: this.loadSelectedDate(),
       userSearch: '',
       dataLoaded: true,
-      alertMessage: '',
       userData: [],
-      token: '12346',
-      validToken: true
+      loading: false
     };
   }
 
   async componentDidMount() {
-    try {
-      await this.axiosUserData(this.state.selectedDate);
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false });
-    }
+    await this.axiosUserData(this.state.selectedDate);
   }
 
   loadSelectedDate = () => {
@@ -53,11 +46,17 @@ class DatePage extends React.Component {
   };
 
   axiosUserData = async selectedDate => {
-    selectedDate = selectedDate.format('DD/MM/YYYY');
-    let dateData = await findDate(selectedDate);
-    const userData = dateData.users;
-    dateData.users = undefined;
-    this.setState({ userData, dateData });
+    try {
+      this.setState({ loading: true });
+      selectedDate = selectedDate.format('DD/MM/YYYY');
+      let dateData = await findDate(selectedDate);
+      const userData = dateData.users;
+      dateData.users = undefined;
+      this.setState({ loading: false });
+      this.setState({ userData, dateData, dataLoaded: true });
+    } catch (err) {
+      this.setState({ loading: false, dataLoaded: false, userData: [] });
+    }
   };
 
   handleSearchChange = e => {
@@ -68,19 +67,14 @@ class DatePage extends React.Component {
   };
 
   handleDateChange = async event => {
-    try {
-      this.setState({ selectedDate: event });
-      await this.axiosUserData(event);
-      sessionStorage.setItem(
-        'selectedDate',
-        moment(event)
-          .tz('Asia/Bangkok')
-          .format()
-      );
-      this.setState({ dataLoaded: true });
-    } catch (err) {
-      this.setState({ dataLoaded: false, userData: [] });
-    }
+    this.setState({ selectedDate: event });
+    await this.axiosUserData(event);
+    sessionStorage.setItem(
+      'selectedDate',
+      moment(event)
+        .tz('Asia/Bangkok')
+        .format()
+    );
   };
 
   render() {
@@ -89,8 +83,8 @@ class DatePage extends React.Component {
       dateData,
       dataLoaded,
       selectedDate,
-      validToken,
-      userSearch
+      userSearch,
+      loading
     } = this.state;
 
     return (
@@ -125,16 +119,32 @@ class DatePage extends React.Component {
               </MDBRow>
 
               <MDBCardBody>
-                {!dataLoaded ? (
-                  <MDBAlert color="danger">No date data</MDBAlert>
-                ) : null}
-                <DateTable
-                  dateData={dateData}
-                  validToken={validToken}
-                  userData={userData.filter(u =>
-                    userSearch ? u.uid.includes(userSearch) : u
-                  )}
-                />
+                {loading ? (
+                  <div
+                    className="my-5"
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {!dataLoaded ? (
+                      <MDBAlert color="danger">No date data</MDBAlert>
+                    ) : null}
+                    <DateTable
+                      dateData={dateData}
+                      userData={userData.filter(u =>
+                        userSearch ? u.uid.includes(userSearch) : u
+                      )}
+                    />
+                  </div>
+                )}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>

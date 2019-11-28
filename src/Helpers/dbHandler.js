@@ -50,7 +50,6 @@ export async function findUserDate(userId, monthQuery) {
 }
 
 export async function findDate(dateQuery) {
-  console.log(dateQuery);
   return (
     await axios.post(`${DATE_SERVER}/findDate`, {
       dateQuery: dateQuery

@@ -22,7 +22,7 @@ export default function withAuth(AuthComponent) {
             loaded: true
           });
         } catch (err) {
-          console.log(err);
+          console.error(err);
           Auth.logout();
           this.props.history.replace('/login');
         }
@@ -40,7 +40,6 @@ export default function withAuth(AuthComponent) {
             />
           );
         } else {
-          console.log('not confirmed!');
           return null;
         }
       } else {

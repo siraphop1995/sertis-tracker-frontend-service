@@ -115,13 +115,12 @@ class CreateAccPage extends React.Component {
           `/users`,
           newAccount
         );
-        console.log(response);
         this.props.history.push('/login');
       } else {
         console.error('Invalid Form');
       }
     } catch (error) {
-      // console.log(error.response);
+      console.error(error);
       this.handleStatusCode(error);
     }
   };

@@ -27,20 +27,17 @@ class DateModal extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props);
     if (this.props.modal !== prevProps.modal) {
       this.setState({
         modal: this.props.modal
       });
     }
     if (this.props.userDate !== prevProps.userDate) {
-      console.log(this.props.userDate);
       this.setState({
         userDate: this.props.userDate
       });
     }
     if (this.props.dateData !== prevProps.dateData) {
-      console.log(this.props.dateData);
       this.setState({
         dateData: this.props.dateData
       });
@@ -52,7 +49,6 @@ class DateModal extends React.Component {
       event.preventDefault();
       event.target.className += ' was-validated';
       if (this.validate()) {
-        console.log('Valid!!!!');
         let { dateData, userDate } = this.state;
 
         const { uid } = userDate;

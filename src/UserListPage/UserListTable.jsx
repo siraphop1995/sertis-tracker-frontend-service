@@ -10,12 +10,7 @@ import {
   MDBIcon,
   MDBBtn
 } from 'mdbreact';
-import {
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter
-} from 'mdbreact';
+import { MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 
 class UserListTable extends React.Component {
   constructor(props) {
@@ -24,24 +19,12 @@ class UserListTable extends React.Component {
     this.state = {
       userListData: [],
       userData: {},
-      validToken: false,
       modal: false,
       deleteModal: false
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      validToken: this.props.validToken
-    });
-  }
-
   componentDidUpdate(prevProps) {
-    if (this.props.validToken !== prevProps.validToken) {
-      this.setState({
-        validToken: this.props.validToken
-      });
-    }
     if (this.props.userListData !== prevProps.userListData) {
       this.setState({
         userListData: this.props.userListData
@@ -56,7 +39,6 @@ class UserListTable extends React.Component {
 
   toggleModal = userData => {
     if (!this.state.modal === true) {
-      console.log(userData);
       this.setState({
         userData: userData
       });

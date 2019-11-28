@@ -20,7 +20,6 @@ class NavBar extends Component {
   state = { isOpen: false };
   handleLogout = e => {
     e.preventDefault();
-    console.log(this);
     this.Auth.logout();
   };
 
