@@ -85,7 +85,6 @@ class UserListTable extends React.Component {
 
   render() {
     const { userListData, userData } = this.state;
-    console.log(userData);
     return (
       <div>
         <MDBModal

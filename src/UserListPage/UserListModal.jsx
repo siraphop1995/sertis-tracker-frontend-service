@@ -32,7 +32,6 @@ class UserListModal extends React.Component {
       });
     }
     if (this.props.userData !== prevProps.userData) {
-      console.log(this.props.userData);
       this.setState({
         userData: this.props.userData
       });
@@ -44,7 +43,6 @@ class UserListModal extends React.Component {
       event.preventDefault();
       event.target.className += ' was-validated';
       if (this.validate()) {
-        console.log('Valid!!!!');
         let { userData } = this.state;
         const id = userData._id;
         
