@@ -58,9 +58,9 @@ class NavBar extends Component {
                   <MDBNavLink to="/login">
                     <MDBDropdownItem>Login</MDBDropdownItem>
                   </MDBNavLink>
-                  <MDBNavLink to="/signup">
+                  {/* <MDBNavLink to="/signup">
                     <MDBDropdownItem>Add admin</MDBDropdownItem>
-                  </MDBNavLink>
+                  </MDBNavLink> */}
                   <MDBNavLink to="/logout">
                     <MDBDropdownItem>logout</MDBDropdownItem>
                   </MDBNavLink>

@@ -67,6 +67,7 @@ class AddUserPage extends React.Component {
           validState += 'is-invalid';
         }
         break;
+      default:
     }
     this.setState(
       {
@@ -80,8 +81,8 @@ class AddUserPage extends React.Component {
           }
         }
       },
-      () => {
-        // console.log(errors);
+      err => {
+        console.error(err);
       }
     );
   };

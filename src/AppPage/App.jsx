@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import { LoginPage } from '../LoginPage';
-import { CreateAccPage } from '../CreateAccPage';
+// import { CreateAccPage } from '../CreateAccPage';
 import { AuthDatePage } from '../DatePage';
 import { UserPage } from '../UsersPage';
 import { AuthUserListPage } from '../UserListPage';
@@ -56,7 +56,7 @@ class App extends React.Component {
           <Switch>
             <Redirect exact from="/" to="/users" />
             <Route path="/login" component={LoginPage} />
-            <Route path="/signup" component={CreateAccPage} />
+            {/* <Route path="/signup" component={CreateAccPage} /> */}
             <Route path="/users/:userId/:dateQuery" component={UserPage} />
             <Route path="/users/:userId" component={UserPage} />
             <Route path="/users" component={UserPage} />
