@@ -1,7 +1,6 @@
 import React from 'react';
 import HelperMethods from '../Helpers/HelperMethods';
 import AuthHelperMethods from '../Helpers/AuthHelperMethods';
-import LoaderModal from '../components/Loader';
 
 import UserTable from './UserTable';
 import moment from 'moment-timezone';
@@ -26,7 +25,6 @@ class UserPage extends React.Component {
       userId: '',
       userData: {},
       validToken: true,
-      modal: true,
       loading: false
     };
   }
@@ -61,6 +59,7 @@ class UserPage extends React.Component {
     let selectedMonth = sessionStorage.getItem('selectedMonth');
     return selectedMonth ? moment(selectedMonth) : moment();
   };
+
   loadUserSearch = () => {
     let userSearch = sessionStorage.getItem('userSearch');
     return userSearch ? userSearch : '';
@@ -108,12 +107,6 @@ class UserPage extends React.Component {
     await this.axiosUserData(uid, event);
   };
 
-  toggle = () => {
-    this.setState({
-      modal: !this.state.modal
-    });
-  };
-
   render() {
     const {
       userData,
@@ -126,7 +119,6 @@ class UserPage extends React.Component {
 
     return (
       <div>
-        <LoaderModal modal={this.state.modal} toggle={this.toggle} />
         <MDBContainer fluid>
           <MDBCol>
             <MDBCard style={{ marginTop: '20px' }}>
@@ -167,8 +159,16 @@ class UserPage extends React.Component {
 
               <MDBCardBody>
                 {loading ? (
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="sr-only">Loading...</span>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </div>
                   </div>
                 ) : (
                   <div>

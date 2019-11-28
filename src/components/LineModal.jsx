@@ -8,11 +8,12 @@ import {
   MDBModalFooter
 } from 'mdbreact';
 
-class Loader extends React.Component {
+class LineModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false
+      modal: false,
+      lineMessage: ''
     };
   }
 
@@ -22,11 +23,15 @@ class Loader extends React.Component {
         modal: this.props.modal
       });
     }
+    if (this.props.lineMessage !== prevProps.lineMessage) {
+      this.setState({
+        lineMessage: this.props.lineMessage
+      });
+    }
   }
 
   render() {
-    const { modal, toggle } = this.state;
-
+    const { lineMessage } = this.state;
     return (
       <div>
         <MDBContainer>
@@ -36,12 +41,12 @@ class Loader extends React.Component {
             centered
             size="lg"
           >
-            <MDBModalHeader toggle={this.props.toggle}></MDBModalHeader>
+            <MDBModalHeader toggle={this.props.toggle}>
+              Line message
+            </MDBModalHeader>
             <MDBModalBody>
               <MDBContainer>
-                <div className="spinner-border text-primary" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
+                <p className="text-justify mb-0">Message: {lineMessage}</p>
               </MDBContainer>
             </MDBModalBody>
             <MDBModalFooter></MDBModalFooter>
@@ -51,4 +56,4 @@ class Loader extends React.Component {
     );
   }
 }
-export default Loader;
+export default LineModal;

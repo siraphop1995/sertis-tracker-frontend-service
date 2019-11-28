@@ -1,5 +1,6 @@
 import React from 'react';
 import UserModal from './UserModal';
+import LineModal from '../components/LineModal';
 
 import {
   MDBTable,
@@ -9,12 +10,6 @@ import {
   MDBBtn,
   MDBBadge
 } from 'mdbreact';
-import {
-  MDBPopover,
-  MDBPopoverBody,
-  MDBPopoverHeader,
-  MDBContainer
-} from 'mdbreact';
 
 class UserTable extends React.Component {
   constructor(props) {
@@ -23,9 +18,11 @@ class UserTable extends React.Component {
     this.state = {
       dateData: [],
       validToken: false,
-      modal: false,
+      editModal: false,
       userDate: {},
-      userData: {}
+      userData: {},
+      lineModal: false,
+      lineMessage: ''
     };
   }
 
@@ -53,15 +50,27 @@ class UserTable extends React.Component {
     }
   }
 
-  toggle = userDate => {
-    if (!this.state.modal === true) {
+  editModalToggle = userDate => {
+    if (!this.state.editModal === true) {
       console.log(userDate);
       this.setState({
         userDate: userDate
       });
     }
     this.setState({
-      modal: !this.state.modal
+      editModal: !this.state.editModal
+    });
+  };
+
+  lineModalToggle = lineMessage => {
+    console.log(lineMessage);
+    if (!this.state.lineModal === true) {
+      this.setState({
+        lineMessage: lineMessage
+      });
+    }
+    this.setState({
+      lineModal: !this.state.lineModal
     });
   };
 
@@ -73,15 +82,20 @@ class UserTable extends React.Component {
   };
 
   render() {
-    const { dateData, validToken } = this.state;
+    const { dateData, validToken, lineMessage } = this.state;
 
     return (
       <div>
+        <LineModal
+          modal={this.state.lineModal}
+          toggle={this.lineModalToggle}
+          lineMessage={lineMessage}
+        />
         <UserModal
-          modal={this.state.modal}
+          modal={this.state.editModal}
           userDate={this.state.userDate}
           userData={this.state.userData}
-          toggle={this.toggle}
+          toggle={this.editModalToggle}
           onUpdate={this.updateHandler}
         />
         <MDBTable hover small responsive>
@@ -101,15 +115,13 @@ class UserTable extends React.Component {
           <MDBTableBody>
             {dateData.map(data => {
               const isLine = data.data.lineMessage ? (
-                <MDBPopover placement="top" popover clickable id="popper1">
-                  {/* <MDBBtn>popover on top</MDBBtn> */}
-                  <MDBBadge color="success">
-                    <MDBIcon far icon="comment-dots" size="2x" />
-                  </MDBBadge>
-                  <div>
-                    <MDBPopoverBody>{data.data.lineMessage} </MDBPopoverBody>
-                  </div>
-                </MDBPopover>
+                <MDBBadge
+                  tag="a"
+                  color="success"
+                  onClick={() => this.lineModalToggle(data.data.lineMessage)}
+                >
+                  <MDBIcon far icon="comment-dots" size="2x" />
+                </MDBBadge>
               ) : null;
 
               const color =
@@ -135,7 +147,7 @@ class UserTable extends React.Component {
                           color="warning"
                           size="sm"
                           className="my-0 py-1"
-                          onClick={() => this.toggle(data)}
+                          onClick={() => this.editModalToggle(data)}
                         >
                           <MDBIcon icon="edit" />
                         </MDBBtn>
