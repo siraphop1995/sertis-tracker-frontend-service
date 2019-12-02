@@ -43,6 +43,9 @@ class UserPage extends React.Component {
         const { selectedMonth } = this.state;
         await this.axiosUserData(userId, selectedMonth);
       }
+    } else {
+      console.log('else')
+      await this.axiosUserData(userId);
     }
   }
 
@@ -56,7 +59,7 @@ class UserPage extends React.Component {
 
   loadSelectedMonth = () => {
     let selectedMonth = sessionStorage.getItem('selectedMonth');
-    return selectedMonth ? moment(selectedMonth) : moment();
+    return selectedMonth ? moment(selectedMonth) : undefined;
   };
 
   loadUserSearch = () => {
@@ -161,7 +164,7 @@ class UserPage extends React.Component {
               <MDBCardBody>
                 {loading ? (
                   <div
-                  className="my-5"
+                    className="my-5"
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
