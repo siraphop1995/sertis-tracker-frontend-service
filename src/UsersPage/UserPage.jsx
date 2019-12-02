@@ -44,7 +44,6 @@ class UserPage extends React.Component {
         await this.axiosUserData(userId, selectedMonth);
       }
     } else {
-      console.log('else')
       await this.axiosUserData(userId);
     }
   }
